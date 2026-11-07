@@ -195,16 +195,15 @@ def build_cluster(atoms, cutoff=6.0, max_num_neighbors=100, bond_scale=(1.15, 1.
 
 
 class PairClusterData(Data):
-    """Two crystal clusters (parent 1 = suffix _1, parent 2 = suffix _2) in one sample.
-    Batch with follow_batch=['z_1', 'z_2'] (gives z_1_batch, z_2_batch)."""
+    """Parent clusters (_1, _2) and optional child (_offspring).
+    Include z_offspring in follow_batch when using the child."""
     _NODE_INDEX = ('edge_index', 'edge_index_inter', 'image_src')
 
     def __inc__(self, key, value, *args, **kwargs):
         for k in self._NODE_INDEX:
-            if key == k + '_1':
-                return self.z_1.size(0)
-            if key == k + '_2':
-                return self.z_2.size(0)
+            for suffix in ('1', '2', 'offspring'):
+                if key == f'{k}_{suffix}':
+                    return self[f'z_{suffix}'].size(0)
         return super().__inc__(key, value, *args, **kwargs)
 
     def __cat_dim__(self, key, value, *args, **kwargs):
@@ -216,7 +215,8 @@ class PairClusterData(Data):
 _CLUSTER_KEYS = ('z', 'pos', 'aux_ind', 'image_src', 'edge_index', 'edge_index_inter')
 
 
-def make_pair_cluster_dataset(df, cutoff=6.0, max_num_neighbors=100, global_cols=(), cache=None, verbose=True):
+def make_pair_cluster_dataset(df, cutoff=6.0, max_num_neighbors=100, global_cols=(), cache=None, verbose=True,
+                              offspring_structure=False):
     """One PairClusterData per row of a labelled offspring df (needs p1, p2, p1_id, p2_id, label, offspring_id).
     Clusters are cached by uspex id (a parent appears in many pairs); pass `cache` (uspex_id -> build_cluster
     output) to reuse clusters built earlier. Returns (data, cache)."""
@@ -234,6 +234,9 @@ def make_pair_cluster_dataset(df, cutoff=6.0, max_num_neighbors=100, global_cols
         c1, c2 = cluster(int(row.p1_id), row.p1), cluster(int(row.p2_id), row.p2)
         kw = {f'{k}_1': c1[k] for k in _CLUSTER_KEYS}
         kw.update({f'{k}_2': c2[k] for k in _CLUSTER_KEYS})
+        if offspring_structure:
+            child = cluster(int(row.offspring_id), row.offspring)
+            kw.update({f'{k}_offspring': child[k] for k in _CLUSTER_KEYS})
         d = PairClusterData(**kw, y=torch.tensor([float(row.label)]),
                             offspring_id=torch.tensor([int(row.offspring_id)]))
         if global_cols:
@@ -492,6 +495,8 @@ class PairMXtal(nn.Module):
 
     fusion='concat_pool' : inside-atom embeddings of both parents are pooled together per pair (symmetric).
     fusion='pool_concat' : each parent -> crystal embedding g1, g2, then [g1+g2, |g1-g2|, g1*g2].
+    offspring_structure=True includes child nodes in concat_pool or appends its crystal
+    embedding in pool_concat; the encoder weights are shared by default.
     crystal_norm='batch' : BatchNorm1d on the crystal / pair embedding before the fusion (not in MXtalTools).
         All parents hold the same two molecules, so the softmax-sum pooled embeddings are dominated by a component
         shared by every crystal (at initialization they differ by ~3 % of their size between crystals) and the
@@ -500,18 +505,26 @@ class PairMXtal(nn.Module):
     """
 
     def __init__(self, config=DISCRIMINATOR_CONFIG, atom_features=DEFAULT_ATOM_FEATURES, node_standardization=None,
-                 fusion='concat_pool', shared_encoder=True, n_global=0, h_fea_len=64, dropout=0.2, edge_type=False, crystal_norm='batch'):
+                 fusion='concat_pool', shared_encoder=True, n_global=0, h_fea_len=64, dropout=0.2, edge_type=False,
+                 crystal_norm='batch', offspring_structure=False):
         super().__init__()
+        if fusion not in ('concat_pool', 'pool_concat'):
+            raise ValueError(fusion)
         self.fusion, self.n_global = fusion, n_global
+        self.offspring_structure = offspring_structure
         make = lambda: MXtalCrystalEncoder(config, atom_features, node_standardization, edge_type)
         self.enc1 = make()
         self.enc2 = self.enc1 if shared_encoder else make()
+        if offspring_structure:
+            self.enc_offspring = self.enc1 if shared_encoder else make()
         if fusion == 'concat_pool':
             self.pair_pool = AugSoftmaxAggregation(temperature=1, bias=0.1, channels=self.enc1.node_dim)
             self.pair_mlp = self.enc1.gnn_mlp if shared_encoder else make().gnn_mlp
             pooled = self.enc1.out_dim
         else:
             pooled = 3 * self.enc1.out_dim
+            if offspring_structure:
+                pooled += self.enc1.out_dim
         self.crystal_norm = nn.BatchNorm1d(self.enc1.out_dim) if crystal_norm == 'batch' else nn.Identity()
         self.head = nn.Sequential(nn.Linear(pooled + n_global, h_fea_len), nn.GELU(), nn.Dropout(dropout),
                                   nn.Linear(h_fea_len, 1))
@@ -526,11 +539,19 @@ class PairMXtal(nn.Module):
         if self.fusion == 'concat_pool':
             h1, b1 = self.enc1.node_embeddings(*self._args(data, 1))
             h2, b2 = self.enc2.node_embeddings(*self._args(data, 2))
-            g = self.crystal_norm(self.pair_mlp(self.pair_pool(torch.cat([h1, h2]), torch.cat([b1, b2]), dim_size=n)))
+            hs, bs = [h1, h2], [b1, b2]
+            if self.offspring_structure:
+                hc, bc = self.enc_offspring.node_embeddings(*self._args(data, 'offspring'))
+                hs.append(hc)
+                bs.append(bc)
+            g = self.crystal_norm(self.pair_mlp(self.pair_pool(torch.cat(hs), torch.cat(bs), dim_size=n)))
         else:
             g1 = self.crystal_norm(self.enc1(*self._args(data, 1), num_graphs=n))
             g2 = self.crystal_norm(self.enc2(*self._args(data, 2), num_graphs=n))
             g = torch.cat([g1 + g2, (g1 - g2).abs(), g1 * g2], dim=-1)
+            if self.offspring_structure:
+                gc = self.crystal_norm(self.enc_offspring(*self._args(data, 'offspring'), num_graphs=n))
+                g = torch.cat([g, gc], dim=-1)
         if self.n_global:
             g = torch.cat([g, data.u], dim=-1)
         return self.head(g).squeeze(-1)

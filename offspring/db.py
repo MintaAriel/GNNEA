@@ -7,20 +7,22 @@ Layout of the ASE SQLite database (one row per USPEX individual):
                           p1_id, e1 (if >= 1 parent), p2_id, e2 (if 2 parents), is_best,
                           volume, symmetry, e_above_hull
                           + label / limit once labels.write_labels_to_db has been run
-Parents are referenced by their uspex_id, so every structure is stored only once and the
-offspring table (p1, p2, e1, e2, offspring_e, operator, generation, p1_id, p2_id) is
-re-assembled by `read_offspring_df`.
+Parents are referenced by their uspex_id. Schema 2 also stores calculator-free child
+geometry in row.data.offspring_atoms as an ASE Atoms dictionary. `read_offspring_df`
+returns it as an ASE Atoms object in 'offspring'; legacy databases fall back to row atoms.
+Both representations contain relaxed geometry from gatheredPOSCARS.
 """
 import os
 
 import numpy as np
 import pandas as pd
+from ase import Atoms
 from ase.calculators.singlepoint import SinglePointCalculator
 from ase.db import connect
 
 
 
-def build_offspring_db(results_dir, db_path, uspex_ver='2126', overwrite=True):
+def build_offspring_db(results_dir, db_path, uspex_ver='2126', overwrite=True, project_name='GNNEA'):
     # imported here so that reading the db / training does not require the ea package
     from ea.io.uspex_io import indiv_to_df, get_structure_from_id, poscar_to_atoms
 
@@ -48,10 +50,20 @@ def build_offspring_db(results_dir, db_path, uspex_ver='2126', overwrite=True):
             for k, p in enumerate(parents[:2], start=1):
                 kv[f'p{k}_id'] = p
                 kv[f'e{k}'] = float(energy[p])
-            db.write(atoms, **kv)
+            # ASE's row atoms remain the relaxed individual. Store an explicit, calculator-free
+            # offspring payload as well, so the child input has an unambiguous schema.
+            payload = {}
+            if parents:
+                offspring = atoms.copy()
+                offspring.calc = None
+                payload['offspring_atoms'] = offspring.todict()
+            db.write(atoms, data=payload, **kv)
 
         db.metadata = {'source': os.path.abspath(results_dir), 'uspex_ver': str(uspex_ver),
-                       'n_individuals': len(indiv), 'n_best': len(best_ids)}
+                       'n_individuals': len(indiv), 'n_best': len(best_ids),
+                       'schema_version': 2, 'project': project_name,
+                       'offspring_geometry': 'relaxed',
+                       'offspring_atoms_storage': 'row.data.offspring_atoms (ASE Atoms.todict)'}
     return db_path
 
 
@@ -62,6 +74,9 @@ def read_individuals_df(db_path):
         d = dict(r.key_value_pairs)
         d['natoms'] = r.natoms
         d['atoms'] = r.toatoms()
+        d['offspring_atoms'] = (Atoms.fromdict(r.data['offspring_atoms'])
+                                if 'offspring_atoms' in r.data else d['atoms'].copy())
+        d['offspring_atoms'].calc = None
         rows.append(d)
     return pd.DataFrame(rows).sort_values('uspex_id').reset_index(drop=True)
 
@@ -101,7 +116,7 @@ def read_offspring_df(db_path, operators=None, min_parents=1, structures=True):
     if structures:
         df['p1'] = lookup(df['p1_id'], 'atoms')
         df['p2'] = lookup(df['p2_id'], 'atoms')
-        df['offspring'] = child['atoms'].values
+        df['offspring'] = child['offspring_atoms'].values
 
     first = ['p1', 'p2', 'e1', 'e2', 'offspring_e', 'operator', 'generation', 'p1_id', 'p2_id']
     first = [c for c in first if c in df]

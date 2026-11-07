@@ -1,0 +1,22 @@
+{
+  "verified_utc": "2026-11-07T11:53:14.561046+00:00",
+  "runs": 32,
+  "prediction_tables": 96,
+  "unit_tests_passed": 6,
+  "database_sha256": "618acd1961f21a92b08cb69d46ca4ae82cda48e8c68cbd2ab7d850baee784c74",
+  "source_sha256": "0a297ba2514d8c096b66c5ed3f86e53c0976e8252b0a8f4e152c31371d3af0ef",
+  "labels_identical_to_original": true,
+  "checks": [
+    "configuration/data/source fingerprints",
+    "matched split manifests across models and variants",
+    "no parent-group overlap in group split",
+    "chronological generation split",
+    "prediction IDs/labels",
+    "ROC-AUC",
+    "balanced accuracy",
+    "confusion matrices",
+    "GPU 0",
+    "brian_ase_env",
+    "no energy inputs"
+  ]
+}

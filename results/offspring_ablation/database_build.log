@@ -1,0 +1,14 @@
+/home/sirena/Brian/Github/GNNEA/data/offspring_gnnea.db: 3341 offspring with ASE Atoms in the offspring column
+        e1  e2  offspring_e  ... natoms_offspring  natoms_p1  natoms_p2
+0 -283.606 NaN     -283.746  ...               42         42       <NA>
+1 -283.277 NaN     -283.581  ...               42         42       <NA>
+2 -283.493 NaN     -283.244  ...               42         42       <NA>
+3 -283.339 NaN     -283.714  ...               42         42       <NA>
+4 -283.827 NaN     -283.814  ...               42         42       <NA>
+
+[5 rows x 11 columns]
+operator
+LatMutation    1478
+Heredity       1371
+keptBest        492
+Name: count, dtype: int64

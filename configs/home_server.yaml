@@ -1,5 +1,5 @@
 project:
-  name: ASE-Evolutionary-Algorithm
+  name: GNNEA
 
 paths:
   data_dir: ./data

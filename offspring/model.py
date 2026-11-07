@@ -61,18 +61,30 @@ class PairCGCNN(nn.Module):
     fusion='pool_concat' : each parent is pooled to h1, h2, then [h1+h2, |h1-h2|, h1*h2].
     shared_encoder=False uses two independent encoders (parent-order dependent).
     n_global > 0 appends per-pair scalar features (e.g. parent energies) to the pooled vector.
+    offspring_structure=True adds child nodes before concat_pool, or appends the pooled child
+    to the symmetric parent representation in pool_concat. Child and parents share weights
+    unless shared_encoder=False. Only the parents are required to be exchangeable.
     """
 
     def __init__(self, n_species=9, node_fea_len=64, edge_fea_len=64, h_fea_len=128, n_conv=3,
-                 r_cut=6.0, fusion='concat_pool', shared_encoder=True, n_global=0, dropout=0.2):
+                 r_cut=6.0, fusion='concat_pool', shared_encoder=True, n_global=0, dropout=0.2,
+                 offspring_structure=False):
         super().__init__()
+        if fusion not in ('concat_pool', 'pool_concat'):
+            raise ValueError(fusion)
         self.fusion = fusion
         self.n_global = n_global
+        self.offspring_structure = offspring_structure
         self.enc1 = CGCNNEncoder(n_species, node_fea_len, edge_fea_len, n_conv, r_cut)
         self.enc2 = self.enc1 if shared_encoder else CGCNNEncoder(n_species, node_fea_len, edge_fea_len,
                                                                  n_conv, r_cut)
+        if offspring_structure:
+            self.enc_offspring = self.enc1 if shared_encoder else CGCNNEncoder(
+                n_species, node_fea_len, edge_fea_len, n_conv, r_cut)
         self.lin_atom = nn.Linear(node_fea_len, h_fea_len)
         pooled = 2 * h_fea_len if fusion == 'concat_pool' else 3 * 2 * h_fea_len
+        if offspring_structure and fusion == 'pool_concat':
+            pooled += 2 * h_fea_len
         self.head = nn.Sequential(nn.Linear(pooled + n_global, h_fea_len), nn.Softplus(),
                                   nn.Dropout(dropout), nn.Linear(h_fea_len, 1))
 
@@ -87,15 +99,23 @@ class PairCGCNN(nn.Module):
         h2 = self.enc2(data.numbers_2, data.edge_index_2, data.edge_length_2)
         h1 = F.softplus(self.lin_atom(h1))
         h2 = F.softplus(self.lin_atom(h2))
+        if self.offspring_structure:
+            hc = F.softplus(self.lin_atom(self.enc_offspring(
+                data.numbers_offspring, data.edge_index_offspring, data.edge_length_offspring)))
 
         if self.fusion == 'concat_pool':
             h = torch.cat([h1, h2], dim=0)
             batch = torch.cat([data.numbers_1_batch, data.numbers_2_batch], dim=0)
+            if self.offspring_structure:
+                h = torch.cat([h, hc], dim=0)
+                batch = torch.cat([batch, data.numbers_offspring_batch], dim=0)
             g = self._pool(h, batch, n)
         else:
             g1 = self._pool(h1, data.numbers_1_batch, n)
             g2 = self._pool(h2, data.numbers_2_batch, n)
             g = torch.cat([g1 + g2, (g1 - g2).abs(), g1 * g2], dim=-1)
+            if self.offspring_structure:
+                g = torch.cat([g, self._pool(hc, data.numbers_offspring_batch, n)], dim=-1)
 
         if self.n_global:
             g = torch.cat([g, data.u], dim=-1)

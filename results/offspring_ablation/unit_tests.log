@@ -1,0 +1,6 @@
+/home/sirena/miniconda3/envs/brian_ase_env/lib/python3.11/site-packages/torch/jit/_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+----------------------------------------------------------------------
+Ran 6 tests in 0.279s
+
+OK

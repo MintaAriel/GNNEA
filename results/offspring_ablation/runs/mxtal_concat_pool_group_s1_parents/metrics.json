@@ -1,0 +1,126 @@
+{
+  "config": {
+    "seed": 1,
+    "split": "group",
+    "fusion": "concat_pool",
+    "shared_encoder": true,
+    "energy_features": false,
+    "offspring_structure": false,
+    "h_fea": 64,
+    "dropout": 0.2,
+    "lr": 0.001,
+    "weight_decay": 0.0001,
+    "batch_size": 64,
+    "eval_batch_size": 128,
+    "epochs": 150,
+    "patience": 25,
+    "lr_factor": 0.5,
+    "lr_patience": 10,
+    "threshold": 0.5,
+    "cutoff": 6.0,
+    "max_neighbors": 100,
+    "node_dim": 64,
+    "message_dim": 32,
+    "embedding_dim": 64,
+    "num_convs": 2,
+    "num_radial": 12,
+    "fc_layers": 2,
+    "fc_dim": 64,
+    "graph_norm": "graph layer",
+    "gnn_dropout": 0.05,
+    "edge_type": false,
+    "crystal_norm": "batch",
+    "activation": "gelu",
+    "fcs_per_gc": 1,
+    "num_input_classes": 101,
+    "atom_type_embedding_dim": 12,
+    "radial_embedding": "bessel",
+    "envelope_exponent": 5,
+    "fc_norm": "layer",
+    "db": "/home/sirena/Brian/Github/GNNEA/data/offspring_gnnea.db",
+    "out": "/home/sirena/Brian/Github/GNNEA/results/offspring_ablation/runs/mxtal_concat_pool_group_s1_parents",
+    "device": "cuda"
+  },
+  "encoder": "mxtal",
+  "fingerprint": "39efd7fe0ae013723e0ad38b1f42a7aa33969671fbb7cb3f53f8687bd3e65f66",
+  "n_params": 47765,
+  "best_epoch": 54,
+  "epochs_completed": 80,
+  "train_time_s": 94.00912413198967,
+  "n_train": 813,
+  "n_val": 210,
+  "n_test": 182,
+  "provenance": {
+    "database_sha256": "618acd1961f21a92b08cb69d46ca4ae82cda48e8c68cbd2ab7d850baee784c74",
+    "source_sha256": "0a297ba2514d8c096b66c5ed3f86e53c0976e8252b0a8f4e152c31371d3af0ef",
+    "conda_env": "brian_ase_env",
+    "torch": "2.14.1+cu126",
+    "cuda": "12.6",
+    "physical_gpu": 0,
+    "gpu_name": "Tesla V100-SXM2-32GB",
+    "offspring_geometry": "relaxed"
+  },
+  "train": {
+    "accuracy": 0.7269372693726938,
+    "balanced_accuracy": 0.7361623616236161,
+    "precision": 0.5671232876712329,
+    "recall": 0.7638376383763837,
+    "f1": 0.6509433962264151,
+    "roc_auc": 0.823167576694217,
+    "average_precision": 0.6808110683442508,
+    "confusion": [
+      [
+        384,
+        158
+      ],
+      [
+        64,
+        207
+      ]
+    ],
+    "threshold": 0.5,
+    "loss": 0.6773520234472784
+  },
+  "val": {
+    "accuracy": 0.6904761904761905,
+    "balanced_accuracy": 0.7013403263403264,
+    "precision": 0.5631067961165048,
+    "recall": 0.7435897435897436,
+    "f1": 0.6408839779005525,
+    "roc_auc": 0.7701048951048951,
+    "average_precision": 0.6038596373949652,
+    "confusion": [
+      [
+        87,
+        45
+      ],
+      [
+        20,
+        58
+      ]
+    ],
+    "threshold": 0.5,
+    "loss": 0.7510455892199561
+  },
+  "test": {
+    "accuracy": 0.6978021978021978,
+    "balanced_accuracy": 0.7158244140360385,
+    "precision": 0.5340909090909091,
+    "recall": 0.7704918032786885,
+    "f1": 0.6308724832214765,
+    "roc_auc": 0.7394661969922776,
+    "average_precision": 0.49022576987653654,
+    "confusion": [
+      [
+        80,
+        41
+      ],
+      [
+        14,
+        47
+      ]
+    ],
+    "threshold": 0.5,
+    "loss": 0.8186118406253856
+  }
+}

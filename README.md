@@ -1,36 +1,48 @@
-# Predicting good / bad Heredity offspring with a pair-CGCNN
+# GNNEA
 
-Data: python-USPEX (2026, `uspex_ver='2126'`) run on theophylline (C14N8H16O4 per 42-atom cell),
-`~/Documents/uspex/theo_uspexpython/results1` (extracted from `theo_uspexpython.zip`, `the_final_test/results1`).
+Graph neural networks for classifying good/bad Heredity offspring from a theophylline USPEX search.
+The latest previous study is `report/mxtal_report.tex` (November 3): the corrected MXtal encoder matched pair-CGCNN from parent structures. The new experiment tests whether including the offspring geometry helps.
 
-Environment: `conda activate ase_env` with `pip install -e ~/PycharmProjects/ASE-Evolutionary-Algorithm`
-(`ea` module) plus `torch` (CPU wheel), `torch_geometric`, `vesin`, `scikit-learn`.
+Use `configs/sirena.yml` for all current machine, environment, dataset, model, training and experiment settings. It inherits portable paths and the project name from `configs/base.yaml`. Relative paths resolve against the repository root. Other machine profiles retain their own external software paths.
 
-All commands are run from this folder.
+On Sirena, use `brian_ase_env` and physical GPU **0**, matching the device index in nvtop/nvidia-smi. The launcher sets `CUDA_DEVICE_ORDER=PCI_BUS_ID` and `CUDA_VISIBLE_DEVICES` before importing torch. It automatically enters the configured conda environment when necessary.
 
-| step                  | command                                                                                                                      | output                                                                                                                 |
-|-----------------------|------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------|
-| speed check           | `python scripts/00_benchmark_speed.py`                                                                                         | `results/benchmark_speed.txt`                                                                                            |
-| Task 1: ASE db        | `python scripts/01_build_db.py [--results DIR]`                                                                                | `data/offspring.db`                                                                                                      |
-| read the db           | `python scripts/read_db.py data/offspring.db --operators Heredity`                                                             | DataFrame `p1 p2 e1 e2 offspring_e operator generation p1_id p2_id ...`                                                  |
-| Task 2: labels        | `python scripts/02_label.py`                                                                                                   | `label`, `limit` written in the db, `data/labelled_offspring.csv`, `data/generation_limits.csv`                                |
-| Task 2: one GNN       | `python scripts/03_train_gnn.py --fusion concat_pool [--energy-features] [--split random|group|generation]`                   | `results/runs/<name>/`                                                                                                   |
-| all GNN runs          | `bash scripts/run_experiments.sh` (cluster: `sbatch scripts/train_slurm.sbatch`)                                                 | `results/runs/*`                                                                                                         |
-| baselines             | `python scripts/04_baselines.py`                                                                                               | `results/baselines.json`                                                                                                 |
-| MXtalTools encoder    | `python scripts/09_train_mxtal.py --out results/runs/M_concat_struct [--fusion pool_concat] [--energy-features] [--edge-type]` | `results/runs/<name>/` (same files as 03)                                                                                |
-| parent clusters (RDF) | `python scripts/10_parent_clusters.py [--d-cut X] [--all-individuals]`                                                         | `data/parent_clusters.csv`, `data/pair_rdf_distance.csv`, `results/parent_clusters.json`, `report/figures/parent_clusters.png` |
-| all MXtal runs        | `bash scripts/run_mxtal_experiments.sh` (`--no-crystal-norm` in 09 = faithful head, collapses)                                   | `results/runs/M*`                                                                                                        |
-| MXtal analysis        | `python scripts/11_mxtal_analysis.py`                                                                                          | `results/mxtal_{runs,summary,by_cluster}.csv`, `results/rdf_baselines.json`, `report/figures/mxtal_*`                        |
-| MXtal report          | `cd report && tectonic mxtal_report.tex`                                                                                       | `report/mxtal_report.pdf`                                                                                                |
-| figures               | `python scripts/05_make_figures.py`                                                                                            | `report/figures/*`, `results/gnn_summary.csv`                                                                              |
-| Task 3: report        | `cd report && tectonic report.tex`                                                                                             | `report/report.pdf`                                                                                                      |
+```bash
+conda activate brian_ase_env
+python scripts/run_offspring_ablation.py --config configs/sirena.yml
+# Recreate tables and figures from completed, verified runs:
+python scripts/run_offspring_ablation.py --config configs/sirena.yml --analyze-only
+```
 
-From python:
+For a fresh dataset, run `python scripts/01_build_db.py --config configs/sirena.yml` and then `python scripts/02_label.py --config configs/sirena.yml` before training. The builder requires `--overwrite` to replace an existing database.
+
+`bash scripts/remote_gpu_run.sh` launches the same configured experiment in the foreground. Monitor it with `nvtop` and `tail -f logs/offspring_ablation.log` when redirecting its output to that log.
+
+The new database is `data/offspring_gnnea.db`; the previous report database is preserved as `data/offspring.db`. Each offspring row stores relaxed ASE row atoms plus an explicit calculator-free `row.data.offspring_atoms` dictionary. `read_offspring_df` reconstructs an `ase.Atoms` object in its `offspring` column and also supports the original database schema.
 
 ```python
 from offspring.db import read_offspring_df
-df = read_offspring_df('data/offspring.db', operators=['Heredity'])   # p1/p2/offspring are ase.Atoms
+from src.config import load_config, project_path
+config = load_config()
+df = read_offspring_df(project_path(config['dataset']['db']), operators=['Heredity'])
+# df.p1, df.p2, df.offspring contain ASE Atoms objects.
 ```
 
-Package layout (`offspring/`): `mxtal.py` (MXtalTools crystal encoder + RDF port), `db.py` (ASE db build/read), `labels.py` (generation limit and labels),
-`data.py` (labelled table, splits), `graphs.py` (periodic graphs, pair batching), `model.py` (pair-CGCNN).
+The configured ablation contains 32 runs: CGCNN/MXtal, concat-pool/pool-concat, parents/parents+offspring, three parent-group split seeds and one generation split seed. Parent energies are disabled for this structure-only comparison. Both variants use identical labels, split IDs, training sampler seeds, hyperparameters and validation-loss checkpoint selection.
+
+- `concat_pool`: concatenate the node embeddings of all enabled structures, then pool. Adding the child keeps the parameter count unchanged when the encoder is shared.
+- `pool_concat`: append the pooled child embedding to `[g1 + g2, abs(g1 - g2), g1 * g2]`. This preserves parent symmetry and increases the head width.
+
+**The available offspring geometry is already relaxed.** This tests post-relaxation classification. Screening candidates before relaxation requires unrelaxed offspring structures, which are absent from this dataset. Offspring energies are used to create labels and never supplied as input features. Parent-group splitting follows the previous report (unordered parent energies rounded to three decimals); it does not guarantee structure-disjoint sets. Generation splitting holds out future generations of the same search.
+
+Outputs are under `results/offspring_ablation/`: `summary.csv`, `paired_deltas.csv` (paired parent-group bootstrap intervals), `prediction_changes.csv` (corrected/regressed decisions), `structure_id_reuse.csv`, `verification.json`, `offspring_comparison.{png,pdf}`, `offspring_roc.{png,pdf}`, and `report.txt`. A report copy is saved in `report/offspring_ablation.txt`. Every run retains its resolved YAML, split manifest, checkpoint, learning history, predictions and metrics with database/source fingerprints and GPU provenance. Resume accepts completed runs only when their fingerprints match.
+
+Single runs support CLI overrides:
+
+```bash
+python scripts/03_train_gnn.py --offspring-structure --fusion pool_concat --out results/manual_cgcnn
+python scripts/09_train_mxtal.py --offspring-structure --fusion concat_pool --out results/manual_mxtal
+python -m unittest discover -s tests -v
+```
+
+Shared code lives in `src/`: configuration, environment/GPU selection, a common training loop and matched analysis. `offspring/` contains database/labels/splits and the CGCNN/MXtal graph and model implementations. The numbered analysis scripts and old shell experiment grids reproduce the earlier parent-only reports; their historical analysis paths target `data/offspring.db` and `results/runs/`.

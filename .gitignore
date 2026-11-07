@@ -4,3 +4,8 @@ presentation/
 logs/
 logs_cpu_partial/
 
+__pycache__/
+*.py[cod]
+data/graph_cache/
+results/smoke/
+

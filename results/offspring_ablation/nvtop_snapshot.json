@@ -1,0 +1,342 @@
+[
+  {
+   "device_name": "Tesla V100-SXM2-32GB",
+   "gpu_clock": "1530MHz",
+   "mem_clock": "877MHz",
+   "temp": "49C",
+   "fan_speed": null,
+   "power_draw": "106W",
+   "gpu_util": "54%",
+   "encode": "0%",
+   "decode": "0%",
+   "mem_util": "3%",
+   "mem_total": "34359738368",
+   "mem_used": "1050869760",
+   "mem_free": "33308868608",
+   "processes" : [
+     {
+       "pid": "14333",
+       "cmdline": "/usr/lib/xorg/Xorg vt2 -displayfd 3 -auth /run/user/1000/gdm/Xauthority -nolisten tcp -background none -noreset -keeptty -novtswitch -verbose 3",
+       "kind": "graphic",
+       "user": "sirena",
+       "gpu_usage": "0%",
+       "gpu_mem_bytes_alloc": "4669440",
+       "gpu_mem_usage": "0%",
+       "encode": "0%",
+       "decode": "0%"
+     },
+     {
+       "pid": "1064575",
+       "cmdline": "python scripts/run_offspring_ablation.py --config configs/sirena.yml",
+       "kind": "compute",
+       "user": "sirena",
+       "gpu_usage": "54%",
+       "gpu_mem_bytes_alloc": "754974720",
+       "gpu_mem_usage": "2%",
+       "encode": "0%",
+       "decode": "0%"
+     }
+   ]
+  },
+  {
+   "device_name": "Tesla V100-SXM2-32GB",
+   "gpu_clock": "135MHz",
+   "mem_clock": "877MHz",
+   "temp": "35C",
+   "fan_speed": null,
+   "power_draw": "38W",
+   "gpu_util": "0%",
+   "encode": "0%",
+   "decode": "0%",
+   "mem_util": "0%",
+   "mem_total": "34359738368",
+   "mem_used": "292421632",
+   "mem_free": "34067316736",
+   "processes" : [
+     {
+       "pid": "14333",
+       "cmdline": "/usr/lib/xorg/Xorg vt2 -displayfd 3 -auth /run/user/1000/gdm/Xauthority -nolisten tcp -background none -noreset -keeptty -novtswitch -verbose 3",
+       "kind": "graphic",
+       "user": "sirena",
+       "gpu_usage": "0%",
+       "gpu_mem_bytes_alloc": "4669440",
+       "gpu_mem_usage": "0%",
+       "encode": "0%",
+       "decode": "0%"
+     }
+   ]
+  },
+  {
+   "device_name": "Tesla V100-SXM2-32GB",
+   "gpu_clock": "135MHz",
+   "mem_clock": "877MHz",
+   "temp": "34C",
+   "fan_speed": null,
+   "power_draw": "39W",
+   "gpu_util": "0%",
+   "encode": "0%",
+   "decode": "0%",
+   "mem_util": "0%",
+   "mem_total": "34359738368",
+   "mem_used": "292421632",
+   "mem_free": "34067316736",
+   "processes" : [
+     {
+       "pid": "14333",
+       "cmdline": "/usr/lib/xorg/Xorg vt2 -displayfd 3 -auth /run/user/1000/gdm/Xauthority -nolisten tcp -background none -noreset -keeptty -novtswitch -verbose 3",
+       "kind": "graphic",
+       "user": "sirena",
+       "gpu_usage": "0%",
+       "gpu_mem_bytes_alloc": "4669440",
+       "gpu_mem_usage": "0%",
+       "encode": "0%",
+       "decode": "0%"
+     }
+   ]
+  },
+  {
+   "device_name": "Tesla V100-SXM2-32GB",
+   "gpu_clock": "135MHz",
+   "mem_clock": "877MHz",
+   "temp": "41C",
+   "fan_speed": null,
+   "power_draw": "42W",
+   "gpu_util": "0%",
+   "encode": "0%",
+   "decode": "0%",
+   "mem_util": "0%",
+   "mem_total": "34359738368",
+   "mem_used": "292421632",
+   "mem_free": "34067316736",
+   "processes" : [
+     {
+       "pid": "14333",
+       "cmdline": "/usr/lib/xorg/Xorg vt2 -displayfd 3 -auth /run/user/1000/gdm/Xauthority -nolisten tcp -background none -noreset -keeptty -novtswitch -verbose 3",
+       "kind": "graphic",
+       "user": "sirena",
+       "gpu_usage": "0%",
+       "gpu_mem_bytes_alloc": "4669440",
+       "gpu_mem_usage": "0%",
+       "encode": "0%",
+       "decode": "0%"
+     }
+   ]
+  },
+  {
+   "device_name": "NVIDIA GeForce GT 1030",
+   "gpu_clock": "139MHz",
+   "mem_clock": "405MHz",
+   "temp": "36C",
+   "fan_speed": "0%",
+   "power_draw": null,
+   "gpu_util": "0%",
+   "encode": "0%",
+   "decode": "0%",
+   "mem_util": "31%",
+   "mem_total": "2147483648",
+   "mem_used": "666959872",
+   "mem_free": "1480523776",
+   "processes" : [
+     {
+       "pid": "14333",
+       "cmdline": "/usr/lib/xorg/Xorg vt2 -displayfd 3 -auth /run/user/1000/gdm/Xauthority -nolisten tcp -background none -noreset -keeptty -novtswitch -verbose 3",
+       "kind": "graphic",
+       "user": "sirena",
+       "gpu_usage": "0%",
+       "gpu_mem_bytes_alloc": "257310720",
+       "gpu_mem_usage": "12%",
+       "encode": "0%",
+       "decode": "0%"
+     },
+     {
+       "pid": "14739",
+       "cmdline": "/usr/bin/gnome-shell",
+       "kind": "graphic",
+       "user": "sirena",
+       "gpu_usage": "0%",
+       "gpu_mem_bytes_alloc": "164872192",
+       "gpu_mem_usage": "8%",
+       "encode": "0%",
+       "decode": "0%"
+     },
+     {
+       "pid": "24585",
+       "cmdline": "/usr/bin/gnome-system-monitor",
+       "kind": "graphic",
+       "user": "sirena",
+       "gpu_usage": "0%",
+       "gpu_mem_bytes_alloc": "19775488",
+       "gpu_mem_usage": "1%",
+       "encode": "0%",
+       "decode": "0%"
+     },
+     {
+       "pid": "83845",
+       "cmdline": "/snap/firefox/9137/usr/lib/firefox/firefox",
+       "kind": "graphic",
+       "user": "sirena",
+       "gpu_usage": "0%",
+       "gpu_mem_bytes_alloc": "133918720",
+       "gpu_mem_usage": "6%",
+       "encode": "0%",
+       "decode": "0%"
+     },
+     {
+       "pid": "1868422",
+       "cmdline": "/usr/bin/nautilus --gapplication-service",
+       "kind": "graphic",
+       "user": "sirena",
+       "gpu_usage": "0%",
+       "gpu_mem_bytes_alloc": "17940480",
+       "gpu_mem_usage": "1%",
+       "encode": "0%",
+       "decode": "0%"
+     }
+   ]
+  },
+  {
+   "device_name": "Tesla V100-SXM2-16GB",
+   "gpu_clock": "1530MHz",
+   "mem_clock": "877MHz",
+   "temp": "61C",
+   "fan_speed": null,
+   "power_draw": "238W",
+   "gpu_util": "85%",
+   "encode": "0%",
+   "decode": "0%",
+   "mem_util": "14%",
+   "mem_total": "17179869184",
+   "mem_used": "2426601472",
+   "mem_free": "14753267712",
+   "processes" : [
+     {
+       "pid": "14333",
+       "cmdline": "/usr/lib/xorg/Xorg vt2 -displayfd 3 -auth /run/user/1000/gdm/Xauthority -nolisten tcp -background none -noreset -keeptty -novtswitch -verbose 3",
+       "kind": "graphic",
+       "user": "sirena",
+       "gpu_usage": "0%",
+       "gpu_mem_bytes_alloc": "4669440",
+       "gpu_mem_usage": "0%",
+       "encode": "0%",
+       "decode": "0%"
+     },
+     {
+       "pid": "3141872",
+       "cmdline": "/home/sirena/miniconda3/envs/deepmd_dpa4/bin/python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=6, pipe_handle=19) --multiprocessing-fork",
+       "kind": "compute",
+       "user": "sirena",
+       "gpu_usage": "85%",
+       "gpu_mem_bytes_alloc": "2166358016",
+       "gpu_mem_usage": "13%",
+       "encode": "0%",
+       "decode": "0%"
+     }
+   ]
+  },
+  {
+   "device_name": "Tesla V100-SXM2-16GB",
+   "gpu_clock": "1507MHz",
+   "mem_clock": "877MHz",
+   "temp": "68C",
+   "fan_speed": null,
+   "power_draw": "296W",
+   "gpu_util": "88%",
+   "encode": "0%",
+   "decode": "0%",
+   "mem_util": "13%",
+   "mem_total": "17179869184",
+   "mem_used": "2384658432",
+   "mem_free": "14795210752",
+   "processes" : [
+     {
+       "pid": "14333",
+       "cmdline": "/usr/lib/xorg/Xorg vt2 -displayfd 3 -auth /run/user/1000/gdm/Xauthority -nolisten tcp -background none -noreset -keeptty -novtswitch -verbose 3",
+       "kind": "graphic",
+       "user": "sirena",
+       "gpu_usage": "0%",
+       "gpu_mem_bytes_alloc": "4669440",
+       "gpu_mem_usage": "0%",
+       "encode": "0%",
+       "decode": "0%"
+     },
+     {
+       "pid": "3141868",
+       "cmdline": "/home/sirena/miniconda3/envs/deepmd_dpa4/bin/python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=6, pipe_handle=15) --multiprocessing-fork",
+       "kind": "compute",
+       "user": "sirena",
+       "gpu_usage": "88%",
+       "gpu_mem_bytes_alloc": "2124414976",
+       "gpu_mem_usage": "12%",
+       "encode": "0%",
+       "decode": "0%"
+     }
+   ]
+  },
+  {
+   "device_name": "Tesla V100-SXM2-16GB",
+   "gpu_clock": "1432MHz",
+   "mem_clock": "877MHz",
+   "temp": "76C",
+   "fan_speed": null,
+   "power_draw": "297W",
+   "gpu_util": "92%",
+   "encode": "0%",
+   "decode": "0%",
+   "mem_util": "13%",
+   "mem_total": "17179869184",
+   "mem_used": "2384658432",
+   "mem_free": "14795210752",
+   "processes" : [
+     {
+       "pid": "14333",
+       "cmdline": "/usr/lib/xorg/Xorg vt2 -displayfd 3 -auth /run/user/1000/gdm/Xauthority -nolisten tcp -background none -noreset -keeptty -novtswitch -verbose 3",
+       "kind": "graphic",
+       "user": "sirena",
+       "gpu_usage": "0%",
+       "gpu_mem_bytes_alloc": "4669440",
+       "gpu_mem_usage": "0%",
+       "encode": "0%",
+       "decode": "0%"
+     },
+     {
+       "pid": "3141871",
+       "cmdline": "/home/sirena/miniconda3/envs/deepmd_dpa4/bin/python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=6, pipe_handle=17) --multiprocessing-fork",
+       "kind": "compute",
+       "user": "sirena",
+       "gpu_usage": "92%",
+       "gpu_mem_bytes_alloc": "2124414976",
+       "gpu_mem_usage": "12%",
+       "encode": "0%",
+       "decode": "0%"
+     }
+   ]
+  },
+  {
+   "device_name": "Tesla V100-SXM2-16GB",
+   "gpu_clock": "135MHz",
+   "mem_clock": "877MHz",
+   "temp": "33C",
+   "fan_speed": null,
+   "power_draw": "39W",
+   "gpu_util": "0%",
+   "encode": "0%",
+   "decode": "0%",
+   "mem_util": "1%",
+   "mem_total": "17179869184",
+   "mem_used": "256770048",
+   "mem_free": "16923099136",
+   "processes" : [
+     {
+       "pid": "14333",
+       "cmdline": "/usr/lib/xorg/Xorg vt2 -displayfd 3 -auth /run/user/1000/gdm/Xauthority -nolisten tcp -background none -noreset -keeptty -novtswitch -verbose 3",
+       "kind": "graphic",
+       "user": "sirena",
+       "gpu_usage": "0%",
+       "gpu_mem_bytes_alloc": "4669440",
+       "gpu_mem_usage": "0%",
+       "encode": "0%",
+       "decode": "0%"
+     }
+   ]
+  }
+]

@@ -1,0 +1,126 @@
+project:
+  name: GNNEA
+paths:
+  data_dir: ./data
+  test_dir: ./tests
+  models_dir: ./models
+  results_dir: ./results
+executables:
+  gulp_dir: /home/sirena/Brian/gulp-6.4/Src/gulp
+  gulp_lib: /home/sirena/Brian/gulp-6.4/Libraries
+uspex:
+  exe: /home/vito/uspex_matlab/program/application/archive/USPEX
+  uspex_path: /home/sirena/Brian/uspex-matlab/application/archive/src
+  mcr_root: /home/sirena/Brian/uspex-matlab
+uspex26:
+  exe: /home/sirena/Brian/Programs/uspex_2607
+vasp:
+  kpeg: /home/sirena/Brian/VASP/create_kpoints.sh
+  vasp6: /home/sirena/Brian/VASP/run_vasp.sh
+  cores: 128
+  cpu_numbering: interleaved
+simulation:
+  engine: mattersim
+mattersim:
+  container_root_cpu: /home/sirena/Brian/container_cpu_2
+  container_root_gpu: /home/sirena/Brian/container_gpu
+  model_path: ./models/tuned_mattersim_12.03.2026.pth
+  device: cpu
+  input_template: input_mattersim_d3_short.py
+  n_threads: 4
+deepmd:
+  conda_env: deepmd_env
+  models_path: /home/sirena/Brian/Github/ASE-Evolutionary-Algorithm/models
+  device: cpu
+  model_key: base_deepmd
+env:
+  conda_env: brian_ase_env
+runtime:
+  device: cuda
+  gpu: 0
+  threads: 4
+dataset:
+  results_dir: ./data/uspex_results1
+  db: ./data/offspring_gnnea.db
+  cache_dir: ./data/graph_cache
+  uspex_ver: '2126'
+  natoms: 42
+  z: -0.5244
+  operators:
+  - Heredity
+  offspring_geometry: relaxed
+split:
+  val: 0.15
+  test: 0.15
+  gen_val: 29
+  gen_test: 35
+training:
+  seed: 1
+  split: group
+  fusion: concat_pool
+  shared_encoder: true
+  energy_features: false
+  offspring_structure: true
+  h_fea: 64
+  dropout: 0.2
+  lr: 0.001
+  weight_decay: 0.0001
+  batch_size: 64
+  eval_batch_size: 128
+  epochs: 150
+  patience: 25
+  lr_factor: 0.5
+  lr_patience: 10
+  threshold: 0.5
+cgcnn:
+  node_fea: 32
+  edge_fea: 32
+  n_conv: 3
+  r_cut: 6.0
+  max_neighbors: 12
+mxtal:
+  cutoff: 6.0
+  max_neighbors: 100
+  node_dim: 64
+  message_dim: 32
+  embedding_dim: 64
+  num_convs: 2
+  num_radial: 12
+  fc_layers: 2
+  fc_dim: 64
+  graph_norm: graph layer
+  gnn_dropout: 0.05
+  edge_type: false
+  crystal_norm: batch
+  activation: gelu
+  fcs_per_gc: 1
+  num_input_classes: 101
+  atom_type_embedding_dim: 12
+  radial_embedding: bessel
+  envelope_exponent: 5
+  fc_norm: layer
+experiments:
+  output_dir: ./results/offspring_ablation
+  encoders:
+  - cgcnn
+  - mxtal
+  fusions:
+  - concat_pool
+  - pool_concat
+  splits:
+    group:
+    - 0
+    - 1
+    - 2
+    generation:
+    - 0
+  offspring_structure:
+  - false
+  - true
+  resume: true
+analysis:
+  bootstrap_samples: 2000
+  seed: 1729
+  confidence: 0.95
+  report_path: ./report/offspring_ablation.txt
+_config_path: /home/sirena/Brian/Github/GNNEA/configs/sirena.yml
