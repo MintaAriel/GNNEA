@@ -1,0 +1,97 @@
+{
+ "config": {
+  "db": "data/offspring.db",
+  "out": "results/runs/MA_concat_struct_s2",
+  "split": "random",
+  "seed": 2,
+  "fusion": "concat_pool",
+  "separate_encoders": false,
+  "energy_features": false,
+  "edge_type": false,
+  "no_crystal_norm": false,
+  "cutoff": 6.0,
+  "max_neighbors": 100,
+  "node_dim": 64,
+  "message_dim": 32,
+  "embedding_dim": 64,
+  "num_convs": 2,
+  "num_radial": 12,
+  "fc_layers": 2,
+  "fc_dim": 64,
+  "graph_norm": "graph layer",
+  "gnn_dropout": 0.05,
+  "h_fea": 64,
+  "dropout": 0.2,
+  "lr": 0.001,
+  "weight_decay": 0.0001,
+  "batch_size": 64,
+  "epochs": 150,
+  "patience": 25,
+  "threads": 2,
+  "device": "cpu"
+ },
+ "encoder": "mxtal",
+ "n_params": 47765,
+ "best_epoch": 41,
+ "train_time_s": 6528.079407453537,
+ "n_train": 843,
+ "n_val": 181,
+ "n_test": 181,
+ "train": {
+  "accuracy": 0.7069988137603797,
+  "balanced_accuracy": 0.7400001255477019,
+  "precision": 0.5440180586907449,
+  "recall": 0.8426573426573427,
+  "f1": 0.6611796982167353,
+  "roc_auc": 0.8125604198315151,
+  "confusion": [
+   [
+    355,
+    202
+   ],
+   [
+    45,
+    241
+   ]
+  ],
+  "threshold": 0.5
+ },
+ "val": {
+  "accuracy": 0.6353591160220995,
+  "balanced_accuracy": 0.6570208728652751,
+  "precision": 0.4787234042553192,
+  "recall": 0.7258064516129032,
+  "f1": 0.5769230769230769,
+  "roc_auc": 0.7413933315261588,
+  "confusion": [
+   [
+    70,
+    49
+   ],
+   [
+    17,
+    45
+   ]
+  ],
+  "threshold": 0.5
+ },
+ "test": {
+  "accuracy": 0.5966850828729282,
+  "balanced_accuracy": 0.6160206017891028,
+  "precision": 0.4421052631578947,
+  "recall": 0.6774193548387096,
+  "f1": 0.535031847133758,
+  "roc_auc": 0.736649498509081,
+  "confusion": [
+   [
+    66,
+    53
+   ],
+   [
+    20,
+    42
+   ]
+  ],
+  "threshold": 0.5
+ }
+}

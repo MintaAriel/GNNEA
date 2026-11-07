@@ -1,0 +1,88 @@
+{
+ "config": {
+  "db": "data/offspring.db",
+  "out": "results/runs/G_concat_struct_group_s2",
+  "split": "group",
+  "seed": 2,
+  "fusion": "concat_pool",
+  "separate_encoders": false,
+  "energy_features": false,
+  "node_fea": 32,
+  "edge_fea": 32,
+  "h_fea": 64,
+  "n_conv": 3,
+  "r_cut": 6.0,
+  "max_neighbors": 12,
+  "dropout": 0.2,
+  "lr": 0.001,
+  "weight_decay": 0.0001,
+  "batch_size": 64,
+  "epochs": 150,
+  "patience": 25,
+  "threads": 2,
+  "device": "cuda"
+ },
+ "n_params": 29601,
+ "best_epoch": 79,
+ "train_time_s": 48.676223278045654,
+ "n_train": 833,
+ "n_val": 194,
+ "n_test": 178,
+ "train": {
+  "accuracy": 0.7106842737094838,
+  "balanced_accuracy": 0.7062826273277407,
+  "precision": 0.5517241379310345,
+  "recall": 0.6931407942238267,
+  "f1": 0.6144,
+  "roc_auc": 0.7964314469002415,
+  "confusion": [
+   [
+    400,
+    156
+   ],
+   [
+    85,
+    192
+   ]
+  ],
+  "threshold": 0.5
+ },
+ "val": {
+  "accuracy": 0.7216494845360825,
+  "balanced_accuracy": 0.7204136796333294,
+  "precision": 0.5783132530120482,
+  "recall": 0.7164179104477612,
+  "f1": 0.64,
+  "roc_auc": 0.8113761899165588,
+  "confusion": [
+   [
+    92,
+    35
+   ],
+   [
+    19,
+    48
+   ]
+  ],
+  "threshold": 0.5
+ },
+ "test": {
+  "accuracy": 0.6292134831460674,
+  "balanced_accuracy": 0.6337932900432901,
+  "precision": 0.5,
+  "recall": 0.6515151515151515,
+  "f1": 0.5657894736842105,
+  "roc_auc": 0.7060335497835498,
+  "confusion": [
+   [
+    69,
+    43
+   ],
+   [
+    23,
+    43
+   ]
+  ],
+  "threshold": 0.5
+ }
+}

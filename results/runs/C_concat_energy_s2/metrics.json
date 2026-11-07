@@ -1,0 +1,88 @@
+{
+ "config": {
+  "db": "data/offspring.db",
+  "out": "results/runs/C_concat_energy_s2",
+  "split": "random",
+  "seed": 2,
+  "fusion": "concat_pool",
+  "separate_encoders": false,
+  "energy_features": true,
+  "node_fea": 32,
+  "edge_fea": 32,
+  "h_fea": 64,
+  "n_conv": 3,
+  "r_cut": 6.0,
+  "max_neighbors": 12,
+  "dropout": 0.2,
+  "lr": 0.001,
+  "weight_decay": 0.0001,
+  "batch_size": 64,
+  "epochs": 150,
+  "patience": 25,
+  "threads": 2,
+  "device": "cuda"
+ },
+ "n_params": 29729,
+ "best_epoch": 51,
+ "train_time_s": 31.066091537475586,
+ "n_train": 843,
+ "n_val": 181,
+ "n_test": 181,
+ "train": {
+  "accuracy": 0.7663107947805456,
+  "balanced_accuracy": 0.7670211296782212,
+  "precision": 0.6267806267806267,
+  "recall": 0.7692307692307693,
+  "f1": 0.6907378335949764,
+  "roc_auc": 0.8535737153331409,
+  "confusion": [
+   [
+    426,
+    131
+   ],
+   [
+    66,
+    220
+   ]
+  ],
+  "threshold": 0.5
+ },
+ "val": {
+  "accuracy": 0.6629834254143646,
+  "balanced_accuracy": 0.658715098942803,
+  "precision": 0.5063291139240507,
+  "recall": 0.6451612903225806,
+  "f1": 0.5673758865248227,
+  "roc_auc": 0.7507454594741122,
+  "confusion": [
+   [
+    80,
+    39
+   ],
+   [
+    22,
+    40
+   ]
+  ],
+  "threshold": 0.5
+ },
+ "test": {
+  "accuracy": 0.6850828729281768,
+  "balanced_accuracy": 0.6639333152615885,
+  "precision": 0.5362318840579711,
+  "recall": 0.5967741935483871,
+  "f1": 0.5648854961832062,
+  "roc_auc": 0.73231227975061,
+  "confusion": [
+   [
+    87,
+    32
+   ],
+   [
+    25,
+    37
+   ]
+  ],
+  "threshold": 0.5
+ }
+}

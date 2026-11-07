@@ -1,0 +1,172 @@
+run,exp,encoder,code,subset,n,good_rate,roc_auc,accuracy
+A_concat_struct_s0,A_concat_struct,CGCNN,A,same cluster,27,0.5925925925925926,0.625,0.6666666666666666
+A_concat_struct_s0,A_concat_struct,CGCNN,A,different cluster,154,0.2987012987012987,0.7220209339774557,0.5974025974025974
+A_concat_struct_s0,A_concat_struct,CGCNN,A,all,181,0.3425414364640884,0.7389536459745188,0.6077348066298343
+A_concat_struct_s1,A_concat_struct,CGCNN,A,same cluster,28,0.6785714285714286,0.6783625730994152,0.7142857142857143
+A_concat_struct_s1,A_concat_struct,CGCNN,A,different cluster,153,0.28104575163398693,0.7657505285412262,0.6862745098039216
+A_concat_struct_s1,A_concat_struct,CGCNN,A,all,181,0.3425414364640884,0.7885605855245323,0.6906077348066298
+A_concat_struct_s2,A_concat_struct,CGCNN,A,same cluster,37,0.5405405405405406,0.7441176470588236,0.6216216216216216
+A_concat_struct_s2,A_concat_struct,CGCNN,A,different cluster,144,0.2916666666666667,0.680905695611578,0.6388888888888888
+A_concat_struct_s2,A_concat_struct,CGCNN,A,all,181,0.3425414364640884,0.717809704526972,0.6353591160220995
+B_poolcat_struct_s0,B_poolcat_struct,CGCNN,B,same cluster,27,0.5925925925925926,0.6988636363636362,0.7407407407407407
+B_poolcat_struct_s0,B_poolcat_struct,CGCNN,B,different cluster,154,0.2987012987012987,0.748389694041868,0.6688311688311688
+B_poolcat_struct_s0,B_poolcat_struct,CGCNN,B,all,181,0.3425414364640884,0.7690431011114123,0.6795580110497238
+B_poolcat_struct_s1,B_poolcat_struct,CGCNN,B,same cluster,28,0.6785714285714286,0.7719298245614035,0.7142857142857143
+B_poolcat_struct_s1,B_poolcat_struct,CGCNN,B,different cluster,153,0.28104575163398693,0.7479915433403805,0.6339869281045751
+B_poolcat_struct_s1,B_poolcat_struct,CGCNN,B,all,181,0.3425414364640884,0.7844944429384657,0.6464088397790055
+B_poolcat_struct_s2,B_poolcat_struct,CGCNN,B,same cluster,37,0.5405405405405406,0.7029411764705883,0.5945945945945946
+B_poolcat_struct_s2,B_poolcat_struct,CGCNN,B,different cluster,144,0.2916666666666667,0.7096171802054155,0.6597222222222222
+B_poolcat_struct_s2,B_poolcat_struct,CGCNN,B,all,181,0.3425414364640884,0.7300081322851721,0.6464088397790055
+C_concat_energy_s0,C_concat_energy,CGCNN,C,same cluster,27,0.5925925925925926,0.6306818181818181,0.7037037037037037
+C_concat_energy_s0,C_concat_energy,CGCNN,C,different cluster,154,0.2987012987012987,0.749194847020934,0.6428571428571429
+C_concat_energy_s0,C_concat_energy,CGCNN,C,all,181,0.3425414364640884,0.7582000542152346,0.6519337016574586
+C_concat_energy_s1,C_concat_energy,CGCNN,C,same cluster,28,0.6785714285714286,0.847953216374269,0.7857142857142857
+C_concat_energy_s1,C_concat_energy,CGCNN,C,different cluster,153,0.28104575163398693,0.7446088794926004,0.6797385620915033
+C_concat_energy_s1,C_concat_energy,CGCNN,C,all,181,0.3425414364640884,0.7896448902141502,0.6961325966850829
+C_concat_energy_s2,C_concat_energy,CGCNN,C,same cluster,37,0.5405405405405406,0.8058823529411765,0.7297297297297297
+C_concat_energy_s2,C_concat_energy,CGCNN,C,different cluster,144,0.2916666666666667,0.6827731092436974,0.6736111111111112
+C_concat_energy_s2,C_concat_energy,CGCNN,C,all,181,0.3425414364640884,0.73231227975061,0.6850828729281768
+E_concat_struct_gen,E_concat_struct_gen,CGCNN,E,same cluster,44,0.5681818181818182,0.6778947368421052,0.7045454545454546
+E_concat_struct_gen,E_concat_struct_gen,CGCNN,E,different cluster,204,0.25,0.6076509034986544,0.6764705882352942
+E_concat_struct_gen,E_concat_struct_gen,CGCNN,E,all,248,0.3064516129032258,0.6728503671970624,0.6814516129032258
+F_concat_energy_gen,F_concat_energy_gen,CGCNN,F,same cluster,44,0.5681818181818182,0.7221052631578948,0.7272727272727273
+F_concat_energy_gen,F_concat_energy_gen,CGCNN,F,different cluster,204,0.25,0.6901191849288735,0.6862745098039216
+F_concat_energy_gen,F_concat_energy_gen,CGCNN,F,all,248,0.3064516129032258,0.7421970624235006,0.6935483870967742
+G_concat_struct_group_s0,G_concat_struct_group,CGCNN,G,same cluster,20,0.2,0.8046875,0.95
+G_concat_struct_group_s0,G_concat_struct_group,CGCNN,G,different cluster,129,0.26356589147286824,0.6475232198142415,0.6821705426356589
+G_concat_struct_group_s0,G_concat_struct_group,CGCNN,G,all,149,0.2550335570469799,0.676149834044571,0.7181208053691275
+G_concat_struct_group_s1,G_concat_struct_group,CGCNN,G,same cluster,14,0.42857142857142855,0.9166666666666667,0.8571428571428571
+G_concat_struct_group_s1,G_concat_struct_group,CGCNN,G,different cluster,168,0.3273809523809524,0.7415929203539824,0.7023809523809523
+G_concat_struct_group_s1,G_concat_struct_group,CGCNN,G,all,182,0.33516483516483514,0.7542338436526216,0.7142857142857143
+G_concat_struct_group_s2,G_concat_struct_group,CGCNN,G,same cluster,34,0.5882352941176471,0.8232142857142857,0.5882352941176471
+G_concat_struct_group_s2,G_concat_struct_group,CGCNN,G,different cluster,144,0.3194444444444444,0.6684782608695652,0.6388888888888888
+G_concat_struct_group_s2,G_concat_struct_group,CGCNN,G,all,178,0.3707865168539326,0.7060335497835498,0.6292134831460674
+H_concat_energy_group_s0,H_concat_energy_group,CGCNN,H,same cluster,20,0.2,0.890625,0.95
+H_concat_energy_group_s0,H_concat_energy_group,CGCNN,H,different cluster,129,0.26356589147286824,0.7122291021671826,0.7131782945736435
+H_concat_energy_group_s0,H_concat_energy_group,CGCNN,H,all,149,0.2550335570469799,0.7381460407776197,0.7449664429530202
+H_concat_energy_group_s1,H_concat_energy_group,CGCNN,H,same cluster,14,0.42857142857142855,0.9791666666666666,0.8571428571428571
+H_concat_energy_group_s1,H_concat_energy_group,CGCNN,H,different cluster,168,0.3273809523809524,0.7644408688656477,0.6964285714285714
+H_concat_energy_group_s1,H_concat_energy_group,CGCNN,H,all,182,0.33516483516483514,0.7811949600325159,0.7087912087912088
+H_concat_energy_group_s2,H_concat_energy_group,CGCNN,H,same cluster,34,0.5882352941176471,0.7857142857142858,0.5882352941176471
+H_concat_energy_group_s2,H_concat_energy_group,CGCNN,H,different cluster,144,0.3194444444444444,0.6973158828748891,0.6458333333333334
+H_concat_energy_group_s2,H_concat_energy_group,CGCNN,H,all,178,0.3707865168539326,0.7243641774891775,0.6348314606741573
+MA_concat_struct_s0,MA_concat_struct,MXtal,A,same cluster,27,0.5925925925925926,0.6022727272727272,0.6666666666666666
+MA_concat_struct_s0,MA_concat_struct,MXtal,A,different cluster,154,0.2987012987012987,0.7063204508856683,0.6298701298701299
+MA_concat_struct_s0,MA_concat_struct,MXtal,A,all,181,0.3425414364640884,0.7140146381133099,0.6353591160220995
+MA_concat_struct_s1,MA_concat_struct,MXtal,A,same cluster,28,0.6785714285714286,0.7719298245614035,0.7142857142857143
+MA_concat_struct_s1,MA_concat_struct,MXtal,A,different cluster,153,0.28104575163398693,0.7433403805496828,0.6862745098039216
+MA_concat_struct_s1,MA_concat_struct,MXtal,A,all,181,0.3425414364640884,0.7824613716454324,0.6906077348066298
+MA_concat_struct_s2,MA_concat_struct,MXtal,A,same cluster,37,0.5405405405405406,0.8058823529411765,0.6756756756756757
+MA_concat_struct_s2,MA_concat_struct,MXtal,A,different cluster,144,0.2916666666666667,0.6851073762838469,0.5763888888888888
+MA_concat_struct_s2,MA_concat_struct,MXtal,A,all,181,0.3425414364640884,0.736649498509081,0.5966850828729282
+MB_poolcat_struct_s0,MB_poolcat_struct,MXtal,B,same cluster,27,0.5925925925925926,0.625,0.6666666666666666
+MB_poolcat_struct_s0,MB_poolcat_struct,MXtal,B,different cluster,154,0.2987012987012987,0.7291666666666666,0.6103896103896104
+MB_poolcat_struct_s0,MB_poolcat_struct,MXtal,B,all,181,0.3425414364640884,0.7266874491732176,0.6187845303867403
+MB_poolcat_struct_s1,MB_poolcat_struct,MXtal,B,same cluster,28,0.6785714285714286,0.7076023391812866,0.75
+MB_poolcat_struct_s1,MB_poolcat_struct,MXtal,B,different cluster,153,0.28104575163398693,0.7412262156448202,0.6209150326797386
+MB_poolcat_struct_s1,MB_poolcat_struct,MXtal,B,all,181,0.3425414364640884,0.7750067769043101,0.6408839779005525
+MB_poolcat_struct_s2,MB_poolcat_struct,MXtal,B,same cluster,37,0.5405405405405406,0.7323529411764707,0.5945945945945946
+MB_poolcat_struct_s2,MB_poolcat_struct,MXtal,B,different cluster,144,0.2916666666666667,0.6862745098039216,0.6458333333333334
+MB_poolcat_struct_s2,MB_poolcat_struct,MXtal,B,all,181,0.3425414364640884,0.7210626185958254,0.6353591160220995
+MC_concat_energy_s0,MC_concat_energy,MXtal,C,same cluster,27,0.5925925925925926,0.6534090909090909,0.6666666666666666
+MC_concat_energy_s0,MC_concat_energy,MXtal,C,different cluster,154,0.2987012987012987,0.7493961352657005,0.7012987012987013
+MC_concat_energy_s0,MC_concat_energy,MXtal,C,all,181,0.3425414364640884,0.7511520737327189,0.6961325966850829
+MC_concat_energy_s1,MC_concat_energy,MXtal,C,same cluster,28,0.6785714285714286,0.8128654970760234,0.7142857142857143
+MC_concat_energy_s1,MC_concat_energy,MXtal,C,different cluster,153,0.28104575163398693,0.7596194503171247,0.6928104575163399
+MC_concat_energy_s1,MC_concat_energy,MXtal,C,all,181,0.3425414364640884,0.7942531851450257,0.6961325966850829
+MC_concat_energy_s2,MC_concat_energy,MXtal,C,same cluster,37,0.5405405405405406,0.6941176470588235,0.6486486486486487
+MC_concat_energy_s2,MC_concat_energy,MXtal,C,different cluster,144,0.2916666666666667,0.6622315592903828,0.6041666666666666
+MC_concat_energy_s2,MC_concat_energy,MXtal,C,all,181,0.3425414364640884,0.7012740580103008,0.6132596685082873
+ME_concat_struct_gen,ME_concat_struct_gen,MXtal,E,same cluster,44,0.5681818181818182,0.6947368421052631,0.6818181818181818
+ME_concat_struct_gen,ME_concat_struct_gen,MXtal,E,different cluster,204,0.25,0.6805715750352429,0.6029411764705882
+ME_concat_struct_gen,ME_concat_struct_gen,MXtal,E,all,248,0.3064516129032258,0.7195914932680538,0.6169354838709677
+MF_concat_energy_gen,MF_concat_energy_gen,MXtal,F,same cluster,44,0.5681818181818182,0.6821052631578947,0.6363636363636364
+MF_concat_energy_gen,MF_concat_energy_gen,MXtal,F,different cluster,204,0.25,0.6740356273228245,0.6617647058823529
+MF_concat_energy_gen,MF_concat_energy_gen,MXtal,F,all,248,0.3064516129032258,0.7177555079559363,0.657258064516129
+MG_concat_struct_group_s0,MG_concat_struct_group,MXtal,G,same cluster,20,0.2,0.796875,0.75
+MG_concat_struct_group_s0,MG_concat_struct_group,MXtal,G,different cluster,129,0.26356589147286824,0.6814241486068112,0.6666666666666666
+MG_concat_struct_group_s0,MG_concat_struct_group,MXtal,G,all,149,0.2550335570469799,0.697724039829303,0.6778523489932886
+MG_concat_struct_group_s1,MG_concat_struct_group,MXtal,G,same cluster,14,0.42857142857142855,0.8958333333333334,0.8571428571428571
+MG_concat_struct_group_s1,MG_concat_struct_group,MXtal,G,different cluster,168,0.3273809523809524,0.7134352373290426,0.6904761904761905
+MG_concat_struct_group_s1,MG_concat_struct_group,MXtal,G,all,182,0.33516483516483514,0.7291694892291016,0.7032967032967034
+MG_concat_struct_group_s2,MG_concat_struct_group,MXtal,G,same cluster,34,0.5882352941176471,0.7196428571428571,0.5882352941176471
+MG_concat_struct_group_s2,MG_concat_struct_group,MXtal,G,different cluster,144,0.3194444444444444,0.6614906832298136,0.5625
+MG_concat_struct_group_s2,MG_concat_struct_group,MXtal,G,all,178,0.3707865168539326,0.6954139610389609,0.5674157303370787
+MH_concat_energy_group_s0,MH_concat_energy_group,MXtal,H,same cluster,20,0.2,0.84375,0.75
+MH_concat_energy_group_s0,MH_concat_energy_group,MXtal,H,different cluster,129,0.26356589147286824,0.7289473684210525,0.627906976744186
+MH_concat_energy_group_s0,MH_concat_energy_group,MXtal,H,all,149,0.2550335570469799,0.747629208155524,0.6442953020134228
+MH_concat_energy_group_s1,MH_concat_energy_group,MXtal,H,same cluster,14,0.42857142857142855,0.9583333333333334,0.8571428571428571
+MH_concat_energy_group_s1,MH_concat_energy_group,MXtal,H,different cluster,168,0.3273809523809524,0.8033789219629928,0.7559523809523809
+MH_concat_energy_group_s1,MH_concat_energy_group,MXtal,H,all,182,0.33516483516483514,0.8164205392223276,0.7637362637362637
+MH_concat_energy_group_s2,MH_concat_energy_group,MXtal,H,same cluster,34,0.5882352941176471,0.7267857142857143,0.5882352941176471
+MH_concat_energy_group_s2,MH_concat_energy_group,MXtal,H,different cluster,144,0.3194444444444444,0.686002661934339,0.6041666666666666
+MH_concat_energy_group_s2,MH_concat_energy_group,MXtal,H,all,178,0.3707865168539326,0.7130681818181818,0.601123595505618
+MT_concat_edgetype_s0,MT_concat_edgetype,MXtal,T,same cluster,27,0.5925925925925926,0.6534090909090909,0.7407407407407407
+MT_concat_edgetype_s0,MT_concat_edgetype,MXtal,T,different cluster,154,0.2987012987012987,0.7409420289855073,0.6363636363636364
+MT_concat_edgetype_s0,MT_concat_edgetype,MXtal,T,all,181,0.3425414364640884,0.7557603686635944,0.6519337016574586
+MT_concat_edgetype_s1,MT_concat_edgetype,MXtal,T,same cluster,28,0.6785714285714286,0.7192982456140351,0.75
+MT_concat_edgetype_s1,MT_concat_edgetype,MXtal,T,different cluster,153,0.28104575163398693,0.7236786469344608,0.6535947712418301
+MT_concat_edgetype_s1,MT_concat_edgetype,MXtal,T,all,181,0.3425414364640884,0.7565735971808079,0.6685082872928176
+MT_concat_edgetype_s2,MT_concat_edgetype,MXtal,T,same cluster,37,0.5405405405405406,0.7529411764705882,0.5945945945945946
+MT_concat_edgetype_s2,MT_concat_edgetype,MXtal,T,different cluster,144,0.2916666666666667,0.622549019607843,0.6111111111111112
+MT_concat_edgetype_s2,MT_concat_edgetype,MXtal,T,all,181,0.3425414364640884,0.681892111683383,0.6077348066298343
+MA_concat_struct_s0,MA_concat_struct,"MXtal, no norm",A,same cluster,27,0.5925925925925926,0.5284090909090909,0.5925925925925926
+MA_concat_struct_s0,MA_concat_struct,"MXtal, no norm",A,different cluster,154,0.2987012987012987,0.42783816425120774,0.2987012987012987
+MA_concat_struct_s0,MA_concat_struct,"MXtal, no norm",A,all,181,0.3425414364640884,0.50670913526701,0.3425414364640884
+MA_concat_struct_s1,MA_concat_struct,"MXtal, no norm",A,same cluster,28,0.6785714285714286,0.48538011695906436,0.6785714285714286
+MA_concat_struct_s1,MA_concat_struct,"MXtal, no norm",A,different cluster,153,0.28104575163398693,0.5446088794926004,0.28104575163398693
+MA_concat_struct_s1,MA_concat_struct,"MXtal, no norm",A,all,181,0.3425414364640884,0.6150718351856872,0.3425414364640884
+MA_concat_struct_s2,MA_concat_struct,"MXtal, no norm",A,same cluster,37,0.5405405405405406,0.6235294117647059,0.4864864864864865
+MA_concat_struct_s2,MA_concat_struct,"MXtal, no norm",A,different cluster,144,0.2916666666666667,0.4764239028944911,0.5138888888888888
+MA_concat_struct_s2,MA_concat_struct,"MXtal, no norm",A,all,181,0.3425414364640884,0.4583898075359177,0.5082872928176796
+MB_poolcat_struct_s0,MB_poolcat_struct,"MXtal, no norm",B,same cluster,27,0.5925925925925926,0.44886363636363635,0.4074074074074074
+MB_poolcat_struct_s0,MB_poolcat_struct,"MXtal, no norm",B,different cluster,154,0.2987012987012987,0.4314613526570048,0.6558441558441559
+MB_poolcat_struct_s0,MB_poolcat_struct,"MXtal, no norm",B,all,181,0.3425414364640884,0.4896991054486311,0.6187845303867403
+MB_poolcat_struct_s1,MB_poolcat_struct,"MXtal, no norm",B,same cluster,28,0.6785714285714286,0.695906432748538,0.6785714285714286
+MB_poolcat_struct_s1,MB_poolcat_struct,"MXtal, no norm",B,different cluster,153,0.28104575163398693,0.5424947145877378,0.28104575163398693
+MB_poolcat_struct_s1,MB_poolcat_struct,"MXtal, no norm",B,all,181,0.3425414364640884,0.6260504201680672,0.3425414364640884
+MB_poolcat_struct_s2,MB_poolcat_struct,"MXtal, no norm",B,same cluster,37,0.5405405405405406,0.4264705882352941,0.5405405405405406
+MB_poolcat_struct_s2,MB_poolcat_struct,"MXtal, no norm",B,different cluster,144,0.2916666666666667,0.5302287581699345,0.2916666666666667
+MB_poolcat_struct_s2,MB_poolcat_struct,"MXtal, no norm",B,all,181,0.3425414364640884,0.513350501490919,0.3425414364640884
+MC_concat_energy_s0,MC_concat_energy,"MXtal, no norm",C,same cluster,27,0.5925925925925926,0.48295454545454547,0.4074074074074074
+MC_concat_energy_s0,MC_concat_energy,"MXtal, no norm",C,different cluster,154,0.2987012987012987,0.48067632850241543,0.7012987012987013
+MC_concat_energy_s0,MC_concat_energy,"MXtal, no norm",C,all,181,0.3425414364640884,0.546760639739767,0.6574585635359116
+MC_concat_energy_s1,MC_concat_energy,"MXtal, no norm",C,same cluster,28,0.6785714285714286,0.7309941520467836,0.7857142857142857
+MC_concat_energy_s1,MC_concat_energy,"MXtal, no norm",C,different cluster,153,0.28104575163398693,0.7644820295983087,0.8104575163398693
+MC_concat_energy_s1,MC_concat_energy,"MXtal, no norm",C,all,181,0.3425414364640884,0.8086202222824614,0.8066298342541437
+MC_concat_energy_s2,MC_concat_energy,"MXtal, no norm",C,same cluster,37,0.5405405405405406,0.5147058823529411,0.5405405405405406
+MC_concat_energy_s2,MC_concat_energy,"MXtal, no norm",C,different cluster,144,0.2916666666666667,0.6139122315592903,0.4027777777777778
+MC_concat_energy_s2,MC_concat_energy,"MXtal, no norm",C,all,181,0.3425414364640884,0.6431282190295473,0.430939226519337
+ME_concat_struct_gen,ME_concat_struct_gen,"MXtal, no norm",E,same cluster,44,0.5681818181818182,0.3221052631578948,0.4318181818181818
+ME_concat_struct_gen,ME_concat_struct_gen,"MXtal, no norm",E,different cluster,204,0.25,0.3794053569140074,0.75
+ME_concat_struct_gen,ME_concat_struct_gen,"MXtal, no norm",E,all,248,0.3064516129032258,0.32959761321909425,0.6935483870967742
+MF_concat_energy_gen,MF_concat_energy_gen,"MXtal, no norm",F,same cluster,44,0.5681818181818182,0.6463157894736842,0.4318181818181818
+MF_concat_energy_gen,MF_concat_energy_gen,"MXtal, no norm",F,different cluster,204,0.25,0.5497244649493784,0.75
+MF_concat_energy_gen,MF_concat_energy_gen,"MXtal, no norm",F,all,248,0.3064516129032258,0.5270425336597306,0.6935483870967742
+MG_concat_struct_group_s0,MG_concat_struct_group,"MXtal, no norm",G,same cluster,20,0.2,0.59375,0.8
+MG_concat_struct_group_s0,MG_concat_struct_group,"MXtal, no norm",G,different cluster,129,0.26356589147286824,0.5764705882352942,0.7364341085271318
+MG_concat_struct_group_s0,MG_concat_struct_group,"MXtal, no norm",G,all,149,0.2550335570469799,0.5533428165007112,0.7449664429530202
+MG_concat_struct_group_s1,MG_concat_struct_group,"MXtal, no norm",G,same cluster,14,0.42857142857142855,0.46875,0.42857142857142855
+MG_concat_struct_group_s1,MG_concat_struct_group,"MXtal, no norm",G,different cluster,168,0.3273809523809524,0.5335478680611423,0.3273809523809524
+MG_concat_struct_group_s1,MG_concat_struct_group,"MXtal, no norm",G,all,182,0.33516483516483514,0.542270695027774,0.33516483516483514
+MG_concat_struct_group_s2,MG_concat_struct_group,"MXtal, no norm",G,same cluster,34,0.5882352941176471,0.32857142857142857,0.5882352941176471
+MG_concat_struct_group_s2,MG_concat_struct_group,"MXtal, no norm",G,different cluster,144,0.3194444444444444,0.4758207630878438,0.3194444444444444
+MG_concat_struct_group_s2,MG_concat_struct_group,"MXtal, no norm",G,all,178,0.3707865168539326,0.5489718614718615,0.3707865168539326
+MH_concat_energy_group_s0,MH_concat_energy_group,"MXtal, no norm",H,same cluster,20,0.2,0.59375,0.8
+MH_concat_energy_group_s0,MH_concat_energy_group,"MXtal, no norm",H,different cluster,129,0.26356589147286824,0.6626934984520123,0.7364341085271318
+MH_concat_energy_group_s0,MH_concat_energy_group,"MXtal, no norm",H,all,149,0.2550335570469799,0.6530346135609294,0.7449664429530202
+MH_concat_energy_group_s1,MH_concat_energy_group,"MXtal, no norm",H,same cluster,14,0.42857142857142855,0.625,0.42857142857142855
+MH_concat_energy_group_s1,MH_concat_energy_group,"MXtal, no norm",H,different cluster,168,0.3273809523809524,0.6566371681415929,0.3273809523809524
+MH_concat_energy_group_s1,MH_concat_energy_group,"MXtal, no norm",H,all,182,0.33516483516483514,0.6627828207559952,0.33516483516483514
+MH_concat_energy_group_s2,MH_concat_energy_group,"MXtal, no norm",H,same cluster,34,0.5882352941176471,0.4660714285714286,0.5882352941176471
+MH_concat_energy_group_s2,MH_concat_energy_group,"MXtal, no norm",H,different cluster,144,0.3194444444444444,0.5431455190771961,0.5833333333333334
+MH_concat_energy_group_s2,MH_concat_energy_group,"MXtal, no norm",H,all,178,0.3707865168539326,0.605654761904762,0.5842696629213483
+MT_concat_edgetype_s0,MT_concat_edgetype,"MXtal, no norm",T,same cluster,27,0.5925925925925926,0.35795454545454547,0.3333333333333333
+MT_concat_edgetype_s0,MT_concat_edgetype,"MXtal, no norm",T,different cluster,154,0.2987012987012987,0.5231481481481481,0.6753246753246753
+MT_concat_edgetype_s0,MT_concat_edgetype,"MXtal, no norm",T,all,181,0.3425414364640884,0.537679587964218,0.6243093922651933
+MT_concat_edgetype_s1,MT_concat_edgetype,"MXtal, no norm",T,same cluster,28,0.6785714285714286,0.6491228070175438,0.6785714285714286
+MT_concat_edgetype_s1,MT_concat_edgetype,"MXtal, no norm",T,different cluster,153,0.28104575163398693,0.4749471458773784,0.3660130718954248
+MT_concat_edgetype_s1,MT_concat_edgetype,"MXtal, no norm",T,all,181,0.3425414364640884,0.5727161832474925,0.4143646408839779
+MT_concat_edgetype_s2,MT_concat_edgetype,"MXtal, no norm",T,same cluster,37,0.5405405405405406,0.6294117647058823,0.4864864864864865
+MT_concat_edgetype_s2,MT_concat_edgetype,"MXtal, no norm",T,different cluster,144,0.2916666666666667,0.47373949579831925,0.4861111111111111
+MT_concat_edgetype_s2,MT_concat_edgetype,"MXtal, no norm",T,all,181,0.3425414364640884,0.45872865275142316,0.4861878453038674

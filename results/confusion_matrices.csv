@@ -1,0 +1,10 @@
+split,model,TN,FP,FN,TP
+random (3 seeds),pair-CGCNN structure,216,141,52,134
+random (3 seeds),pair-CGCNN + energies,238,119,56,130
+random (3 seeds),RandomForest,266,91,40,146
+group (3 seeds),pair-CGCNN structure,246,98,62,103
+group (3 seeds),pair-CGCNN + energies,245,99,57,108
+group (3 seeds),RandomForest,251,93,33,132
+generation,pair-CGCNN structure,126,46,33,43
+generation,pair-CGCNN + energies,126,46,30,46
+generation,RandomForest,131,41,24,52

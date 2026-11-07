@@ -1,0 +1,96 @@
+{
+ "config": {
+  "db": "data/offspring.db",
+  "out": "results/runs/MB_poolcat_struct_s1",
+  "split": "random",
+  "seed": 1,
+  "fusion": "pool_concat",
+  "separate_encoders": false,
+  "energy_features": false,
+  "edge_type": false,
+  "cutoff": 6.0,
+  "max_neighbors": 100,
+  "node_dim": 64,
+  "message_dim": 32,
+  "embedding_dim": 64,
+  "num_convs": 2,
+  "num_radial": 12,
+  "fc_layers": 2,
+  "fc_dim": 64,
+  "graph_norm": "graph layer",
+  "gnn_dropout": 0.05,
+  "h_fea": 64,
+  "dropout": 0.2,
+  "lr": 0.001,
+  "weight_decay": 0.0001,
+  "batch_size": 64,
+  "epochs": 150,
+  "patience": 25,
+  "threads": 2,
+  "device": "cpu"
+ },
+ "encoder": "mxtal",
+ "n_params": 55701,
+ "best_epoch": 9,
+ "train_time_s": 2372.252616882324,
+ "n_train": 843,
+ "n_val": 181,
+ "n_test": 181,
+ "train": {
+  "accuracy": 0.3428232502965599,
+  "balanced_accuracy": 0.5026929982046678,
+  "precision": 0.3404761904761905,
+  "recall": 1.0,
+  "f1": 0.5079928952042628,
+  "roc_auc": 0.5833825061832243,
+  "confusion": [
+   [
+    3,
+    554
+   ],
+   [
+    0,
+    286
+   ]
+  ],
+  "threshold": 0.5
+ },
+ "val": {
+  "accuracy": 0.34806629834254144,
+  "balanced_accuracy": 0.5042016806722689,
+  "precision": 0.34444444444444444,
+  "recall": 1.0,
+  "f1": 0.512396694214876,
+  "roc_auc": 0.5417457305502846,
+  "confusion": [
+   [
+    1,
+    118
+   ],
+   [
+    0,
+    62
+   ]
+  ],
+  "threshold": 0.5
+ },
+ "test": {
+  "accuracy": 0.3425414364640884,
+  "balanced_accuracy": 0.5,
+  "precision": 0.3425414364640884,
+  "recall": 1.0,
+  "f1": 0.5102880658436214,
+  "roc_auc": 0.6260504201680672,
+  "confusion": [
+   [
+    0,
+    119
+   ],
+   [
+    0,
+    62
+   ]
+  ],
+  "threshold": 0.5
+ }
+}

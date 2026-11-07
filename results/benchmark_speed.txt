@@ -1,0 +1,6 @@
+/home/ariel/miniconda3/envs/ase_env/lib/python3.11/site-packages/torch/jit/_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+threads=4  read=4.6s  graphs(1205 pairs)=2.2s
+example pair: PairData(y=[1], numbers_1=[42], edge_index_1=[2, 504], edge_length_1=[504], numbers_2=[42], edge_index_2=[2, 504], edge_length_2=[504], offspring_id=[1])
+concat_pool: params=116545  one epoch over all 1205 pairs = 18.03s -> 200 epochs ~ 60.1 min
+pool_concat: params=182081  one epoch over all 1205 pairs = 18.06s -> 200 epochs ~ 60.2 min
