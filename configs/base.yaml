@@ -1,0 +1,19 @@
+project:
+  name: ASEProject
+
+paths:
+  data_dir: ./data
+  test_dir: ./tests
+  models_dir: ./models
+  
+executables:
+  gulp_dir: ~/Programs/gulp-6.4/Src/gulp
+
+simulation:
+  engine: mattersim
+
+
+env:
+  conda_env: ase_env
+
+

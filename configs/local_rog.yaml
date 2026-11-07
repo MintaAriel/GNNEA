@@ -1,0 +1,46 @@
+project:
+  name: ASE-Evolutionary-Algorithm
+
+paths:
+  data_dir: ./data
+  test_dir: ./tests
+  models_dir: ./models
+  results_dir: ./results
+
+executables:
+  gulp_dir: ~/Programs/gulp-6.4/Src/gulp
+
+uspex:
+  exe: ~/uspex_matlab/program/application/archive/USPEX
+
+uspex26:
+  exe: /home/brian/Programs/USPEX/USPEX26/uspex_2607.sh
+
+vasp:
+  kpeg: /home/vito/PythonProjects/ASEProject/EA/data/runners/create_kpoints.sh
+  vasp6: /home/vito/VASP/forces_FINAL/run_vasp.sh
+  cores: 6
+  cpu_numbering: adjacent
+#adjactent if threads are(0,1) core 0, (2,3) core 1 - laptop cpu
+#interleaved if threads are (0,128) core 0, (1,219) core 1 -AMD EPYC
+
+simulation:
+  engine: mattersim
+
+mattersim:
+  container_root_cpu: /home/vito/PythonProjects/ASEProject/container_cpu_2
+  container_root_gpu: /home/vito/PythonProjects/ASEProject/container_gpu_2
+  model_path: /home/vito/PythonProjects/ASEProject/EA/models/tuned_mattersim_12.03.2026.pth
+  models_path: /home/vito/PythonProjects/ASEProject/container_gpu_2/models
+  device: cpu
+  input_template: input_mattersim_d3_short.py
+  n_threads: 4
+
+deepmd:
+  conda_env: deepmd_env
+  models_path: /home/brian/PycharmProjects/ASE-Evolutionary-Algorithm/models
+  device: cpu
+  model_key: base_deepmd
+
+env:
+  conda_env: ase_env

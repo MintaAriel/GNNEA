@@ -6,7 +6,7 @@ import sys
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 from offspring.db import build_offspring_db, read_offspring_df
 
-DEFAULT_RESULTS = os.path.expanduser('~/Documents/uspex/theo_uspexpython/results1')
+DEFAULT_RESULTS = os.path.join(os.path.dirname(__file__), '..', 'data', 'uspex_results1')
 
 if __name__ == '__main__':
     ap = argparse.ArgumentParser()

@@ -1,0 +1,47 @@
+project:
+  name: ASEProject
+
+paths:
+  data_dir: ./data
+  test_dir: ./tests
+  models_dir: ./models
+  results_dir: ./results
+
+executables:
+  gulp_dir: /home/sirena/Brian/gulp-6.4/Src/gulp
+  gulp_lib: /home/sirena/Brian/gulp-6.4/Libraries
+
+uspex:
+  exe: /home/vito/uspex_matlab/program/application/archive/USPEX
+  uspex_path: /home/sirena/Brian/uspex-matlab/application/archive/src
+  mcr_root: /home/sirena/Brian/uspex-matlab
+
+uspex26:
+  exe: /home/sirena/Brian/Programs/uspex_2607
+
+vasp:
+  kpeg: /home/sirena/Brian/VASP/create_kpoints.sh
+  vasp6: /home/sirena/Brian/VASP/run_vasp.sh
+  cores: 128
+  cpu_numbering: interleaved
+
+simulation:
+  engine: mattersim
+
+mattersim:
+  container_root_cpu: /home/sirena/Brian/container_cpu_2
+  container_root_gpu: /home/sirena/Brian/container_gpu
+  model_path: ./models/tuned_mattersim_12.03.2026.pth
+  device: cpu
+  input_template: input_mattersim_d3_short.py
+  n_threads: 4
+
+deepmd:
+  conda_env: deepmd_env
+  models_path: /home/sirena/Brian/Github/ASE-Evolutionary-Algorithm/models
+  device: cpu
+  model_key: base_deepmd
+
+env:
+  conda_env: brian_ase_env
+

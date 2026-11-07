@@ -1,0 +1,28 @@
+project:
+  name: ASE-Evolutionary-Algorithm
+
+paths:
+  data_dir: ./data
+  test_dir: ./tests
+  models_dir: ./models
+
+executables:
+  gulp_dir: /home/brianminta/Programs/gulp-6.4/Src/gulp
+
+simulation:
+  engine: mattersim
+
+uspex:
+  exe: USPEX
+
+uspex26:
+  exe: /home/brianminta/Programs/USPEX26/uspex_2607.sh
+
+deepmd:
+  conda_env: deepmd_env
+  models_path: /home/brianminta/Github/ASE-Evolutionary-Algorithm/models
+  device: cpu
+  model_key: base_deepmd
+
+env:
+  conda_env: deepmd_env
