@@ -103,15 +103,21 @@ def recalibrate_bn(model, loader, device='cpu'):
 
 def prepare_data(config, encoder):
     ds, model_cfg, train_cfg = config['dataset'], config[encoder], config['training']
-    geometry = connect(project_path(ds['db'])).metadata.get('offspring_geometry', 'relaxed')
-    if geometry != ds['offspring_geometry']:
+    metadata = connect(project_path(ds['db'])).metadata
+    geometry = metadata.get('offspring_geometry')
+    if geometry != 'unrelaxed' or geometry != ds['offspring_geometry']:
         raise ValueError(f"Configured child geometry {ds['offspring_geometry']} differs from database {geometry}.")
+    source = project_path(ds['results_dir']) / ds['offspring_structures']
+    if metadata.get('offspring_structures_sha256') != file_digest(source):
+        raise ValueError('Unrelaxed offspring source differs from the database provenance; rebuild the database.')
     db_hash = file_digest(project_path(ds['db']))
     key = json.dumps([db_hash, encoder, model_cfg, ds, train_cfg['energy_features'],
                       train_cfg['offspring_structure']], sort_keys=True)
     if key in _DATASETS:
         return _DATASETS[key]
     lab = load_labelled(project_path(ds['db']), natoms=ds['natoms'], z=ds['z'], operators=ds['operators'])
+    if lab.offspring.isna().any():
+        raise ValueError('The database lacks unrelaxed geometry for some labelled offspring.')
     gcols = ENERGY_FEATURES if train_cfg['energy_features'] else ()
     child = train_cfg['offspring_structure']
     cache_dir = project_path(ds['cache_dir']) / db_hash
@@ -138,12 +144,13 @@ def make_model(config, encoder, lab, tr, cache):
                   n_global=len(ENERGY_FEATURES) if t['energy_features'] else 0,
                   h_fea_len=t['h_fea'], dropout=t['dropout'], offspring_structure=t['offspring_structure'])
     if encoder == 'cgcnn':
-        max_z = max(int(atoms.numbers.max()) for column in ('p1', 'p2', 'offspring') for atoms in lab[column])
+        columns = ('p1', 'p2', 'offspring') if t['offspring_structure'] else ('p1', 'p2')
+        max_z = max(int(atoms.numbers.max()) for column in columns for atoms in lab[column])
         return PairCGCNN(n_species=max_z + 1, node_fea_len=c['node_fea'], edge_fea_len=c['edge_fea'],
                          n_conv=c['n_conv'], r_cut=c['r_cut'], **common)
-    ids = set(lab.p1_id.iloc[tr].astype(int)) | set(lab.p2_id.iloc[tr].astype(int))
+    ids = {('relaxed', int(i)) for col in ('p1_id', 'p2_id') for i in lab[col].iloc[tr]}
     if t['offspring_structure']:
-        ids.update(lab.offspring_id.iloc[tr].astype(int))
+        ids.update(('unrelaxed', int(i)) for i in lab.offspring_id.iloc[tr])
     z_train = torch.cat([cache[i]['z'][:cache[i]['n_inside']] for i in sorted(ids)]).numpy()
     architecture = argparse.Namespace(activation=c['activation'], graph=argparse.Namespace(
         node_dim=c['node_dim'], message_dim=c['message_dim'], embedding_dim=c['embedding_dim'],
@@ -231,7 +238,11 @@ def run_training(config, encoder, out):
                     source_sha256=source_digest(), conda_env=config['env']['conda_env'], torch=torch.__version__,
                     cuda=torch.version.cuda, physical_gpu=runtime['gpu'],
                     gpu_name=torch.cuda.get_device_name(0) if device.startswith('cuda') else None,
-                    offspring_geometry=config['dataset']['offspring_geometry']))
+                    offspring_geometry=config['dataset']['offspring_geometry'],
+                    offspring_structures_source=str(project_path(config['dataset']['results_dir']) /
+                                                    config['dataset']['offspring_structures']),
+                    offspring_structures_sha256=file_digest(project_path(config['dataset']['results_dir']) /
+                                                           config['dataset']['offspring_structures'])))
     for name, loader in zip(('train', 'val', 'test'), eval_loaders):
         loss, probs, y, ids = evaluate(model, loader, criterion, device)
         result[name] = dict(metrics(y, probs, t['threshold']), loss=loss)

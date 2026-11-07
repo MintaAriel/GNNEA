@@ -218,7 +218,7 @@ _CLUSTER_KEYS = ('z', 'pos', 'aux_ind', 'image_src', 'edge_index', 'edge_index_i
 def make_pair_cluster_dataset(df, cutoff=6.0, max_num_neighbors=100, global_cols=(), cache=None, verbose=True,
                               offspring_structure=False):
     """One PairClusterData per row of a labelled offspring df (needs p1, p2, p1_id, p2_id, label, offspring_id).
-    Clusters are cached by uspex id (a parent appears in many pairs); pass `cache` (uspex_id -> build_cluster
+    Clusters are cached by (geometry state, uspex_id); pass `cache` (key -> build_cluster
     output) to reuse clusters built earlier. Returns (data, cache)."""
     cache = {} if cache is None else cache
 
@@ -231,11 +231,12 @@ def make_pair_cluster_dataset(df, cutoff=6.0, max_num_neighbors=100, global_cols
 
     data = []
     for row in df.itertuples(index=False):
-        c1, c2 = cluster(int(row.p1_id), row.p1), cluster(int(row.p2_id), row.p2)
+        c1 = cluster(('relaxed', int(row.p1_id)), row.p1)
+        c2 = cluster(('relaxed', int(row.p2_id)), row.p2)
         kw = {f'{k}_1': c1[k] for k in _CLUSTER_KEYS}
         kw.update({f'{k}_2': c2[k] for k in _CLUSTER_KEYS})
         if offspring_structure:
-            child = cluster(int(row.offspring_id), row.offspring)
+            child = cluster(('unrelaxed', int(row.offspring_id)), row.offspring)
             kw.update({f'{k}_offspring': child[k] for k in _CLUSTER_KEYS})
         d = PairClusterData(**kw, y=torch.tensor([float(row.label)]),
                             offspring_id=torch.tensor([int(row.offspring_id)]))

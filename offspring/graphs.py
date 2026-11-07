@@ -40,7 +40,7 @@ class PairData(Data):
 def make_pair_dataset(df, r_cut=6.0, n_max_neighbors=12, global_cols=(), offspring_structure=False):
     """One PairData per row of a labelled offspring df (needs p1, p2, p1_id, p2_id, label).
 
-    Graphs of parents are cached by uspex id because the same parent appears in many pairs.
+    Cache keys include geometry state and USPEX ID: the raw child can later become a relaxed parent.
     global_cols: optional per-pair scalar features (e.g. parent energies) stored in `u`.
     offspring_structure: append the calculator-free child graph; no child energy enters the input.
     """
@@ -53,14 +53,14 @@ def make_pair_dataset(df, r_cut=6.0, n_max_neighbors=12, global_cols=(), offspri
 
     data = []
     for row in df.itertuples(index=False):
-        g1 = graph(int(row.p1_id), row.p1)
-        g2 = graph(int(row.p2_id), row.p2)
+        g1 = graph(('relaxed', int(row.p1_id)), row.p1)
+        g2 = graph(('relaxed', int(row.p2_id)), row.p2)
         d = PairData(numbers_1=g1['numbers'], edge_index_1=g1['edge_index'], edge_length_1=g1['edge_length'],
                      numbers_2=g2['numbers'], edge_index_2=g2['edge_index'], edge_length_2=g2['edge_length'],
                      y=torch.tensor([float(row.label)]),
                      offspring_id=torch.tensor([int(row.offspring_id)]))
         if offspring_structure:
-            child = graph(int(row.offspring_id), row.offspring)
+            child = graph(('unrelaxed', int(row.offspring_id)), row.offspring)
             for key, value in child.items():
                 d[f'{key}_offspring'] = value
         if global_cols:

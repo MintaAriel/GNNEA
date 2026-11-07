@@ -48,7 +48,9 @@ dataset:
   z: -0.5244
   operators:
   - Heredity
-  offspring_geometry: relaxed
+  parent_structures: gatheredPOSCARS
+  offspring_structures: gatheredPOSCARS_unrelaxed
+  offspring_geometry: unrelaxed
 split:
   val: 0.15
   test: 0.15

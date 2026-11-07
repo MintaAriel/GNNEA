@@ -1,0 +1,18 @@
+/home/sirena/miniconda3/envs/brian_ase_env/lib/python3.11/site-packages/torch/jit/_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+Verified 3341 offspring exactly against source; 2911 differ from relaxed rows. Labels unchanged: 1205.
+cgcnn: 1205 graph samples ready
+  built 200 clusters
+  built 400 clusters
+  built 600 clusters
+  built 800 clusters
+  built 1000 clusters
+  built 1200 clusters
+  built 1400 clusters
+  built 1600 clusters
+  built 1800 clusters
+  built 2000 clusters
+  built 2200 clusters
+mxtal: 1205 graph samples ready
+Unrelaxed molecule counts: {2: 1193, 1: 12}
+Preflight passed.

@@ -14,9 +14,9 @@ import torch
 from torch_geometric.loader import DataLoader
 
 from offspring.db import build_offspring_db, read_offspring_df
-from offspring.graphs import make_pair_dataset
+from offspring.graphs import atoms2graph, make_pair_dataset
 from offspring.model import PairCGCNN
-from offspring.mxtal import make_pair_cluster_dataset, PairMXtal
+from offspring.mxtal import build_cluster, make_pair_cluster_dataset, PairMXtal
 from src.config import load_config, project_path
 
 
@@ -32,33 +32,75 @@ class OffspringInputTests(unittest.TestCase):
         extra_molecule.translate([2, 2, 2])
         cls.c.extend(extra_molecule)  # child/parent node counts differ, exposing incorrect batch offsets
         cls.c.set_cell([4.8, 5.3, 5])
-        cls.df = pd.DataFrame(dict(p1=[cls.a, cls.b], p2=[cls.b, cls.a], offspring=[cls.c, cls.c],
+        cls.raw_c = cls.c.copy()
+        cls.raw_c.set_cell(cls.c.cell.array * 1.2, scale_atoms=True)
+        cls.df = pd.DataFrame(dict(p1=[cls.a, cls.b], p2=[cls.b, cls.a], offspring=[cls.raw_c, cls.raw_c],
                                    p1_id=[1, 2], p2_id=[2, 1], offspring_id=[3, 4], label=[1, 0]))
 
     def test_database_round_trip_and_legacy_read(self):
         individuals = pd.DataFrame(dict(id=[1, 2, 3, 4], energy=[-2., -1., -3., -1.5], generation=[1, 1, 2, 2],
             parents=[[], [], [1, 2], [2, 1]], operator=['random', 'random', 'Heredity', 'Heredity'],
             volume=[125.] * 4, symmetry=[1] * 4, e_above_hull=[0.] * 4))
+        relaxed = {1: self.a, 2: self.b, 3: self.c, 4: self.c}
+        raw = {3: self.raw_c, 4: self.raw_c}
         io = SimpleNamespace(indiv_to_df=lambda *args, **kwargs: individuals,
-                             get_structure_from_id=lambda *args, **kwargs: {1: self.a, 2: self.b, 3: self.c, 4: self.c},
+                             get_structure_from_id=lambda path, *args, **kwargs: (
+                                 raw if Path(path).name == 'gatheredPOSCARS_unrelaxed' else relaxed),
                              poscar_to_atoms=lambda a: a.copy())
         with tempfile.TemporaryDirectory() as tmp, patch.dict(sys.modules, {'ea.io.uspex_io': io}):
+            parent_source = Path(tmp) / 'gatheredPOSCARS'
+            raw_source = Path(tmp) / 'gatheredPOSCARS_unrelaxed'
+            parent_source.write_text('relaxed fixture')
+            raw_source.write_text('unrelaxed fixture')
             path = Path(tmp) / 'offspring.db'
             build_offspring_db(tmp, path)
             db = connect(path)
-            self.assertEqual(db.metadata['offspring_geometry'], 'relaxed')
+            self.assertEqual(db.metadata['offspring_geometry'], 'unrelaxed')
             self.assertIn('offspring_atoms', db.get(uspex_id=3).data)
+            np.testing.assert_allclose(db.get(uspex_id=3).toatoms().cell, self.c.cell)
             df = read_offspring_df(path, operators=['Heredity'])
             for child in df.offspring:
-                np.testing.assert_allclose(child.positions, self.c.positions)
-                np.testing.assert_allclose(child.cell, self.c.cell)
+                np.testing.assert_allclose(child.positions, self.raw_c.positions)
+                np.testing.assert_allclose(child.cell, self.raw_c.cell)
                 self.assertIsNone(child.calc)
             # Old row-atoms-only databases are still readable.
             legacy = Path(tmp) / 'legacy.db'
             with connect(legacy) as old:
                 for row in db.select():
                     old.write(row.toatoms(), **row.key_value_pairs)
-            self.assertEqual(len(read_offspring_df(legacy)), 2)
+            self.assertTrue(read_offspring_df(legacy).offspring.isna().all())
+            # Missing inputs/IDs and corrupt geometries fail without changing the existing database.
+            original = path.read_bytes()
+            raw_source.unlink()
+            with self.assertRaises(FileNotFoundError):
+                build_offspring_db(tmp, path)
+            self.assertEqual(path.read_bytes(), original)
+            raw_source.write_text('unrelaxed fixture')
+            missing = raw.pop(3)
+            with self.assertRaisesRegex(ValueError, 'offspring IDs missing'):
+                build_offspring_db(tmp, path)
+            self.assertEqual(path.read_bytes(), original)
+            raw[3] = self.a
+            with self.assertRaisesRegex(ValueError, 'compositions differ'):
+                build_offspring_db(tmp, path)
+            self.assertEqual(path.read_bytes(), original)
+            raw[3] = missing
+
+    def test_same_id_has_separate_unrelaxed_child_and_relaxed_parent_graphs(self):
+        df = self.df.copy()
+        df.at[1, 'p1_id'], df.at[1, 'p1'] = 3, self.c
+        data = make_pair_dataset(df, offspring_structure=True)
+        torch.testing.assert_close(data[0].edge_length_offspring, atoms2graph(self.raw_c)['edge_length'])
+        torch.testing.assert_close(data[1].edge_length_1, atoms2graph(self.c)['edge_length'])
+
+    def test_same_id_has_separate_unrelaxed_child_and_relaxed_parent_clusters(self):
+        df = self.df.copy()
+        df.at[1, 'p1_id'], df.at[1, 'p1'] = 3, self.c
+        data, cache = make_pair_cluster_dataset(df, offspring_structure=True, verbose=False)
+        self.assertIn(('unrelaxed', 3), cache)
+        self.assertIn(('relaxed', 3), cache)
+        torch.testing.assert_close(data[0].pos_offspring, build_cluster(self.raw_c)['pos'])
+        torch.testing.assert_close(data[1].pos_1, build_cluster(self.c)['pos'])
 
     def check_graphs_and_model(self, encoder, fusion):
         torch.manual_seed(11)

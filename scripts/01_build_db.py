@@ -1,4 +1,4 @@
-"""Task 1: parse Individuals / BESTIndividuals / gatheredPOSCARS (USPEX 2126) into an ASE db."""
+"""Build relaxed parents and strictly unrelaxed offspring into the ASE database."""
 import argparse
 import os
 import sys
@@ -22,7 +22,9 @@ if __name__ == '__main__':
         raise FileExistsError(f'{path} already exists; select a new --db or pass --overwrite.')
     path.parent.mkdir(parents=True, exist_ok=True)
     build_offspring_db(project_path(a.results), path, uspex_ver=a.uspex_ver,
-                       project_name=config['project']['name'])
+                       project_name=config['project']['name'],
+                       parent_structures=config['dataset']['parent_structures'],
+                       offspring_structures=config['dataset']['offspring_structures'])
     df = read_offspring_df(path)
     print(f'{path}: {len(df)} offspring with ASE Atoms in the offspring column')
     print(df.drop(columns=['p1', 'p2', 'offspring']).head())

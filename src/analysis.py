@@ -39,6 +39,7 @@ def analyze(config, run_paths):
         by_key.setdefault(key, {})[c['offspring_structure']] = (path, result)
         records.append(dict(encoder=key[0], fusion=key[1], split=key[2], seed=key[3],
                             offspring_structure=c['offspring_structure'], best_epoch=result['best_epoch'],
+                            offspring_geometry=result['provenance']['offspring_geometry'],
                             epochs_completed=result['epochs_completed'], n_params=result['n_params'],
                             train_time_s=result['train_time_s'], n_test=result['n_test'], **result['test']))
     pd.DataFrame(records).to_csv(out / 'runs.csv', index=False)
@@ -61,15 +62,15 @@ def analyze(config, run_paths):
             raise ValueError('Baseline and offspring test IDs/labels differ.')
         groups = pred.offspring_id.map(group_lookup).to_numpy()
         manifest = pd.read_csv(base_path / 'split_manifest.csv')
-        training_ids = set(manifest.loc[manifest.subset == 'train', 'p1_id']) | set(
+        training_parent_ids = set(manifest.loc[manifest.subset == 'train', 'p1_id']) | set(
             manifest.loc[manifest.subset == 'train', 'p2_id'])
-        # The augmented model also sees training child IDs. This diagnostic uses IDs only;
-        # copied structures with distinct USPEX IDs can still occur in the "unseen" subset.
-        training_ids.update(manifest.loc[manifest.subset == 'train', 'offspring_id'])
-        pred['child_id_seen_in_augmented_training_inputs'] = pred.offspring_id.isin(training_ids)
+        training_child_ids = set(manifest.loc[manifest.subset == 'train', 'offspring_id'])
+        pred['child_unrelaxed_id_seen_in_training'] = pred.offspring_id.isin(training_child_ids)
+        pred['child_relaxed_id_seen_as_training_parent'] = pred.offspring_id.isin(training_parent_ids)
         lo, hi = paired_bootstrap(pred.y_parents.to_numpy(), pred.p_good_parents.to_numpy(),
             pred.p_good_offspring.to_numpy(), groups, a['bootstrap_samples'], a['seed'], a['confidence'])
         row = dict(encoder=key[0], fusion=key[1], split=key[2], seed=key[3], n_test=len(pred),
+                   offspring_geometry=ds['offspring_geometry'],
                    auc_delta_ci_low=lo, auc_delta_ci_high=hi)
         for metric in METRICS:
             row[f'parents_{metric}'] = base['test'][metric]
@@ -83,9 +84,10 @@ def analyze(config, run_paths):
                                    pred.parents_correct & ~pred.offspring_correct], ['corrected', 'regressed'], 'unchanged')
         row['corrected'] = int((pred.change == 'corrected').sum())
         row['regressed'] = int((pred.change == 'regressed').sum())
-        for seen, name in ((False, 'unseen_child_id'), (True, 'seen_child_id')):
-            subset = pred[pred.child_id_seen_in_augmented_training_inputs == seen]
-            reuse = dict(encoder=key[0], fusion=key[1], split=key[2], seed=key[3], subset=name, n=len(subset))
+        for seen, name in ((False, 'child_id_unseen_as_relaxed_parent'), (True, 'child_id_seen_as_relaxed_parent')):
+            subset = pred[pred.child_relaxed_id_seen_as_training_parent == seen]
+            reuse = dict(encoder=key[0], fusion=key[1], split=key[2], seed=key[3], subset=name, n=len(subset),
+                         offspring_geometry=ds['offspring_geometry'])
             for prefix in ('parents', 'offspring'):
                 reuse[f'{prefix}_auc'] = (roc_auc_score(subset.y_parents, subset[f'p_good_{prefix}'])
                                           if subset.y_parents.nunique() == 2 else None)
@@ -98,6 +100,7 @@ def analyze(config, run_paths):
                                              if len(subset) else None)
         pairs.append(row)
         pred['encoder'], pred['fusion'], pred['split'], pred['seed'] = key
+        pred['offspring_geometry'] = ds['offspring_geometry']
         changes.append(pred)
     paired = pd.DataFrame(pairs)
     paired.to_csv(out / 'paired_deltas.csv', index=False)
@@ -106,6 +109,7 @@ def analyze(config, run_paths):
     summary_rows = []
     for key, subset in paired.groupby(['encoder', 'fusion', 'split'], sort=False):
         row = dict(encoder=key[0], fusion=key[1], split=key[2], n_seeds=len(subset),
+                   offspring_geometry=ds['offspring_geometry'],
                    positive_auc_seeds=int((subset.delta_roc_auc > 0).sum()))
         for metric in METRICS:
             for prefix in ('parents', 'offspring', 'delta'):
@@ -140,7 +144,7 @@ def plot_results(config, paired, summary, by_key):
         ax.set_ylabel('Test ROC-AUC')
         ax.set_title(f'{split.capitalize()} split')
         ax.legend(fontsize=9)
-    fig.suptitle(f"{config['project']['name']}: adding relaxed offspring structure\n"
+    fig.suptitle(f"{config['project']['name']}: adding {config['dataset']['offspring_geometry']} offspring structure\n"
                  'Bars: mean; error bars: sample SD across seeds; dots: runs', fontsize=12)
     fig.tight_layout()
     for extension in ('png', 'pdf'):
@@ -175,6 +179,7 @@ def write_report(config, summary, paired, lab, records):
         f"Environment: {config['env']['conda_env']}; physical GPU: {config['runtime']['gpu']}",
         f"Dataset: {len(lab)} labelled Heredity offspring; good fraction {lab.label.mean():.4f}",
         f"Source results: {project_path(config['dataset']['results_dir'])}; USPEX version {config['dataset']['uspex_ver']}",
+        f"Unrelaxed offspring source: {project_path(config['dataset']['results_dir']) / config['dataset']['offspring_structures']}",
         f"Parent cell size: {config['dataset']['natoms']} atoms; good = child energy <= mean(previous generation) "
         f"+ ({config['dataset']['z']}) * std(previous generation)",
         f"Completed training runs: {len(records)}", '',
@@ -204,11 +209,13 @@ def write_report(config, summary, paired, lab, records):
                      f'AUC delta {row.delta_roc_auc:+.3f}, paired parent-group bootstrap '
                      f"{config['analysis']['confidence']:.0%} interval [{row.auc_delta_ci_low:+.3f}, {row.auc_delta_ci_high:+.3f}]")
     lines += ['', 'Interpretation and limits:',
-        'The child structures come from gatheredPOSCARS and have already been relaxed. This is a post-relaxation classification study.',
-        'An observed gain does not establish screening performance before relaxation; that requires unrelaxed offspring structures.',
+        'Child geometry comes exclusively from the configured unrelaxed POSCAR collection. No relaxed child geometry is used as an offspring input.',
+        'Parent geometry and target energies are relaxed. This tests whether unrelaxed candidate geometry predicts the later relaxation outcome.',
+        'Graph caches distinguish unrelaxed child inputs from relaxed parents even when they share a USPEX ID.',
         'The group split groups unordered parent energies rounded to 3 decimals, following the previous report; it is not a fully structure-disjoint split.',
         'The generation split holds out later generations but can revisit the same packings. Neither split proves transfer to a new USPEX run or molecule.',
-        'structure_id_reuse.csv separates children whose IDs occur among augmented training inputs. Different IDs can still represent copied packings.',
+        'structure_id_reuse.csv separates child IDs seen/unseen as relaxed training parents. A shared ID here does not imply the same geometry state.',
+        'prediction_changes.csv separately checks whether an unrelaxed test child ID occurs among unrelaxed training children. Different IDs can still represent copied packings.',
         'Bootstrap intervals resample parent-pair groups within each fixed test set; they do not measure uncertainty across USPEX searches.',
         'The conflicting-parent-group subsets in paired_deltas.csv are descriptive: groups producing both labels in this dataset.',
         'concat_pool keeps the same parameter count with the child; pool_concat has a wider head. Changes in parameter counts are recorded in runs.csv.',

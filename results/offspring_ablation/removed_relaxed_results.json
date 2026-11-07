@@ -1,0 +1,12 @@
+{
+  "removed": [
+    "/home/sirena/Brian/Github/GNNEA/results/offspring_ablation",
+    "/home/sirena/Brian/Github/GNNEA/data/graph_cache/618acd1961f21a92b08cb69d46ca4ae82cda48e8c68cbd2ab7d850baee784c74",
+    "/home/sirena/Brian/Github/GNNEA/results/smoke",
+    "/tmp/gnnea_analysis_check",
+    "/home/sirena/Brian/Github/GNNEA/report/offspring_ablation.txt",
+    "/home/sirena/Brian/Github/GNNEA/logs/offspring_ablation.log",
+    "/home/sirena/Brian/Github/GNNEA/logs/offspring_analysis.log"
+  ],
+  "obsolete_runs": 32
+}

@@ -18,14 +18,14 @@ For a fresh dataset, run `python scripts/01_build_db.py --config configs/sirena.
 
 `bash scripts/remote_gpu_run.sh` launches the same configured experiment in the foreground. Monitor it with `nvtop` and `tail -f logs/offspring_ablation.log` when redirecting its output to that log.
 
-The new database is `data/offspring_gnnea.db`; the previous report database is preserved as `data/offspring.db`. Each offspring row stores relaxed ASE row atoms plus an explicit calculator-free `row.data.offspring_atoms` dictionary. `read_offspring_df` reconstructs an `ase.Atoms` object in its `offspring` column and also supports the original database schema.
+The new database is `data/offspring_gnnea.db`; the previous report database is preserved as `data/offspring.db`. Each row retains relaxed ASE row atoms and final energy for parent inputs and labels. Its explicit calculator-free `row.data.offspring_atoms` dictionary comes exclusively from `dataset.offspring_structures` (`gatheredPOSCARS_unrelaxed`). `read_offspring_df` reconstructs this unrelaxed `ase.Atoms` object in its `offspring` column. Legacy databases without unrelaxed input return `None` for offspring geometry; relaxed row atoms are never substituted. Missing unrelaxed files, missing child IDs or inconsistent compositions stop database creation before the existing database is replaced.
 
 ```python
 from offspring.db import read_offspring_df
 from src.config import load_config, project_path
 config = load_config()
 df = read_offspring_df(project_path(config['dataset']['db']), operators=['Heredity'])
-# df.p1, df.p2, df.offspring contain ASE Atoms objects.
+# df.p1 and df.p2 are relaxed; df.offspring contains unrelaxed ASE Atoms.
 ```
 
 The configured ablation contains 32 runs: CGCNN/MXtal, concat-pool/pool-concat, parents/parents+offspring, three parent-group split seeds and one generation split seed. Parent energies are disabled for this structure-only comparison. Both variants use identical labels, split IDs, training sampler seeds, hyperparameters and validation-loss checkpoint selection.
@@ -33,7 +33,7 @@ The configured ablation contains 32 runs: CGCNN/MXtal, concat-pool/pool-concat, 
 - `concat_pool`: concatenate the node embeddings of all enabled structures, then pool. Adding the child keeps the parameter count unchanged when the encoder is shared.
 - `pool_concat`: append the pooled child embedding to `[g1 + g2, abs(g1 - g2), g1 * g2]`. This preserves parent symmetry and increases the head width.
 
-**The available offspring geometry is already relaxed.** This tests post-relaxation classification. Screening candidates before relaxation requires unrelaxed offspring structures, which are absent from this dataset. Offspring energies are used to create labels and never supplied as input features. Parent-group splitting follows the previous report (unordered parent energies rounded to three decimals); it does not guarantee structure-disjoint sets. Generation splitting holds out future generations of the same search.
+**Offspring inputs are strictly unrelaxed.** This tests whether candidate geometry before relaxation predicts the later relaxed energy label. Parents remain relaxed. Both graph caches distinguish `(geometry state, USPEX ID)`, so an unrelaxed child never shares its cached geometry with the same individual used later as a relaxed parent. Database and run provenance record the unrelaxed source path and SHA-256 hash. Offspring energies are used to create labels and never supplied as input features. Parent-group splitting follows the previous report (unordered parent energies rounded to three decimals); it does not guarantee structure-disjoint sets. Generation splitting holds out future generations of the same search.
 
 Outputs are under `results/offspring_ablation/`: `summary.csv`, `paired_deltas.csv` (paired parent-group bootstrap intervals), `prediction_changes.csv` (corrected/regressed decisions), `structure_id_reuse.csv`, `verification.json`, `offspring_comparison.{png,pdf}`, `offspring_roc.{png,pdf}`, and `report.txt`. A report copy is saved in `report/offspring_ablation.txt`. Every run retains its resolved YAML, split manifest, checkpoint, learning history, predictions and metrics with database/source fingerprints and GPU provenance. Resume accepts completed runs only when their fingerprints match.
 

@@ -1,128 +1,149 @@
 cgcnn pool_concat child=True group seed=1 train/val/test=813/210/182
 /home/sirena/miniconda3/envs/brian_ase_env/lib/python3.11/site-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
   warnings.warn(
-epoch   0 train=0.9988 val=0.9556 val_auc=0.632 elapsed=0s
+epoch   0 train=1.0004 val=0.9562 val_auc=0.631 elapsed=0s
 /home/sirena/miniconda3/envs/brian_ase_env/lib/python3.11/site-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
   warnings.warn(
-epoch   1 train=0.9100 val=0.9255 val_auc=0.686 elapsed=1s
+epoch   1 train=0.9111 val=0.9289 val_auc=0.659 elapsed=1s
 /home/sirena/miniconda3/envs/brian_ase_env/lib/python3.11/site-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
   warnings.warn(
-epoch   2 train=0.8820 val=0.8893 val_auc=0.712 elapsed=1s
+epoch   2 train=0.8923 val=0.9103 val_auc=0.660 elapsed=1s
 /home/sirena/miniconda3/envs/brian_ase_env/lib/python3.11/site-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
   warnings.warn(
-epoch   3 train=0.8536 val=0.8141 val_auc=0.803 elapsed=1s
+epoch   3 train=0.8857 val=0.8941 val_auc=0.685 elapsed=1s
 /home/sirena/miniconda3/envs/brian_ase_env/lib/python3.11/site-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
   warnings.warn(
-epoch   4 train=0.7815 val=0.7435 val_auc=0.893 elapsed=1s
+epoch   4 train=0.8511 val=0.8720 val_auc=0.718 elapsed=1s
 /home/sirena/miniconda3/envs/brian_ase_env/lib/python3.11/site-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
   warnings.warn(
-epoch   5 train=0.6657 val=0.5364 val_auc=0.932 elapsed=2s
+epoch   5 train=0.8139 val=0.8275 val_auc=0.736 elapsed=2s
 /home/sirena/miniconda3/envs/brian_ase_env/lib/python3.11/site-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
   warnings.warn(
-epoch   6 train=0.5459 val=0.4606 val_auc=0.946 elapsed=2s
+epoch   6 train=0.7916 val=0.8204 val_auc=0.764 elapsed=2s
 /home/sirena/miniconda3/envs/brian_ase_env/lib/python3.11/site-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
   warnings.warn(
-epoch   7 train=0.4486 val=0.4191 val_auc=0.949 elapsed=2s
+epoch   7 train=0.7623 val=0.7875 val_auc=0.765 elapsed=2s
 /home/sirena/miniconda3/envs/brian_ase_env/lib/python3.11/site-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
   warnings.warn(
-epoch   8 train=0.4367 val=0.4660 val_auc=0.933 elapsed=3s
+epoch   8 train=0.7664 val=0.8785 val_auc=0.780 elapsed=3s
 /home/sirena/miniconda3/envs/brian_ase_env/lib/python3.11/site-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
   warnings.warn(
-epoch   9 train=0.3779 val=0.5039 val_auc=0.946 elapsed=3s
+epoch   9 train=0.7335 val=0.8810 val_auc=0.786 elapsed=3s
 /home/sirena/miniconda3/envs/brian_ase_env/lib/python3.11/site-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
   warnings.warn(
-epoch  10 train=0.3925 val=0.4339 val_auc=0.951 elapsed=3s
+epoch  10 train=0.7732 val=0.7776 val_auc=0.792 elapsed=3s
 /home/sirena/miniconda3/envs/brian_ase_env/lib/python3.11/site-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
   warnings.warn(
-epoch  11 train=0.3611 val=0.4270 val_auc=0.950 elapsed=3s
+epoch  11 train=0.7427 val=0.7656 val_auc=0.788 elapsed=3s
 /home/sirena/miniconda3/envs/brian_ase_env/lib/python3.11/site-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
   warnings.warn(
-epoch  12 train=0.3536 val=0.4263 val_auc=0.945 elapsed=4s
+epoch  12 train=0.6895 val=0.7986 val_auc=0.794 elapsed=4s
 /home/sirena/miniconda3/envs/brian_ase_env/lib/python3.11/site-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
   warnings.warn(
-epoch  13 train=0.3375 val=0.4112 val_auc=0.945 elapsed=4s
+epoch  13 train=0.6959 val=0.7659 val_auc=0.806 elapsed=4s
 /home/sirena/miniconda3/envs/brian_ase_env/lib/python3.11/site-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
   warnings.warn(
-epoch  14 train=0.3328 val=0.3782 val_auc=0.951 elapsed=4s
+epoch  14 train=0.6783 val=0.7403 val_auc=0.809 elapsed=4s
 /home/sirena/miniconda3/envs/brian_ase_env/lib/python3.11/site-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
   warnings.warn(
-epoch  15 train=0.3107 val=0.3760 val_auc=0.955 elapsed=5s
+epoch  15 train=0.6651 val=0.7757 val_auc=0.804 elapsed=5s
 /home/sirena/miniconda3/envs/brian_ase_env/lib/python3.11/site-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
   warnings.warn(
-epoch  16 train=0.3042 val=0.3211 val_auc=0.965 elapsed=5s
+epoch  16 train=0.6518 val=0.7332 val_auc=0.818 elapsed=5s
 /home/sirena/miniconda3/envs/brian_ase_env/lib/python3.11/site-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
   warnings.warn(
-epoch  17 train=0.2937 val=0.5083 val_auc=0.962 elapsed=5s
+epoch  17 train=0.6241 val=1.0492 val_auc=0.828 elapsed=5s
 /home/sirena/miniconda3/envs/brian_ase_env/lib/python3.11/site-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
   warnings.warn(
-epoch  18 train=0.2976 val=0.3331 val_auc=0.966 elapsed=5s
+epoch  18 train=0.6348 val=0.7384 val_auc=0.814 elapsed=5s
 /home/sirena/miniconda3/envs/brian_ase_env/lib/python3.11/site-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
   warnings.warn(
-epoch  19 train=0.2704 val=0.3560 val_auc=0.964 elapsed=6s
+epoch  19 train=0.6234 val=0.8611 val_auc=0.831 elapsed=6s
 /home/sirena/miniconda3/envs/brian_ase_env/lib/python3.11/site-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
   warnings.warn(
-epoch  20 train=0.2585 val=0.4183 val_auc=0.968 elapsed=6s
+epoch  20 train=0.5904 val=1.0252 val_auc=0.811 elapsed=6s
 /home/sirena/miniconda3/envs/brian_ase_env/lib/python3.11/site-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
   warnings.warn(
-epoch  21 train=0.2458 val=0.3257 val_auc=0.970 elapsed=6s
+epoch  21 train=0.6076 val=0.8055 val_auc=0.830 elapsed=6s
 /home/sirena/miniconda3/envs/brian_ase_env/lib/python3.11/site-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
   warnings.warn(
-epoch  22 train=0.2516 val=0.4981 val_auc=0.967 elapsed=7s
+epoch  22 train=0.5644 val=0.8598 val_auc=0.819 elapsed=6s
 /home/sirena/miniconda3/envs/brian_ase_env/lib/python3.11/site-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
   warnings.warn(
-epoch  23 train=0.2764 val=0.4077 val_auc=0.951 elapsed=7s
+epoch  23 train=0.5861 val=0.7284 val_auc=0.823 elapsed=7s
 /home/sirena/miniconda3/envs/brian_ase_env/lib/python3.11/site-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
   warnings.warn(
-epoch  24 train=0.2609 val=0.3418 val_auc=0.967 elapsed=7s
+epoch  24 train=0.5889 val=0.8493 val_auc=0.814 elapsed=7s
 /home/sirena/miniconda3/envs/brian_ase_env/lib/python3.11/site-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
   warnings.warn(
-epoch  25 train=0.2554 val=0.5918 val_auc=0.955 elapsed=7s
+epoch  25 train=0.5516 val=1.1787 val_auc=0.844 elapsed=7s
 /home/sirena/miniconda3/envs/brian_ase_env/lib/python3.11/site-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
   warnings.warn(
-epoch  26 train=0.2463 val=0.4158 val_auc=0.973 elapsed=8s
+epoch  26 train=0.5354 val=1.2731 val_auc=0.808 elapsed=8s
 /home/sirena/miniconda3/envs/brian_ase_env/lib/python3.11/site-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
   warnings.warn(
-epoch  27 train=0.2848 val=0.3232 val_auc=0.970 elapsed=8s
+epoch  27 train=0.5601 val=0.7408 val_auc=0.828 elapsed=8s
 /home/sirena/miniconda3/envs/brian_ase_env/lib/python3.11/site-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
   warnings.warn(
-epoch  28 train=0.2478 val=0.4123 val_auc=0.969 elapsed=8s
+epoch  28 train=0.5276 val=1.0345 val_auc=0.816 elapsed=8s
 /home/sirena/miniconda3/envs/brian_ase_env/lib/python3.11/site-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
   warnings.warn(
-epoch  29 train=0.2162 val=0.3503 val_auc=0.973 elapsed=9s
+epoch  29 train=0.4939 val=0.8306 val_auc=0.833 elapsed=8s
 /home/sirena/miniconda3/envs/brian_ase_env/lib/python3.11/site-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
   warnings.warn(
-epoch  30 train=0.2091 val=0.3810 val_auc=0.965 elapsed=9s
+epoch  30 train=0.5083 val=1.0363 val_auc=0.811 elapsed=9s
 /home/sirena/miniconda3/envs/brian_ase_env/lib/python3.11/site-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
   warnings.warn(
-epoch  31 train=0.2096 val=0.4226 val_auc=0.970 elapsed=9s
+epoch  31 train=0.5217 val=0.7933 val_auc=0.806 elapsed=9s
 /home/sirena/miniconda3/envs/brian_ase_env/lib/python3.11/site-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
   warnings.warn(
-epoch  32 train=0.2102 val=0.4455 val_auc=0.968 elapsed=9s
+epoch  32 train=0.4998 val=0.8918 val_auc=0.811 elapsed=9s
 /home/sirena/miniconda3/envs/brian_ase_env/lib/python3.11/site-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
   warnings.warn(
-epoch  33 train=0.2091 val=0.3764 val_auc=0.968 elapsed=10s
+epoch  33 train=0.4766 val=0.8631 val_auc=0.823 elapsed=10s
 /home/sirena/miniconda3/envs/brian_ase_env/lib/python3.11/site-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
   warnings.warn(
-epoch  34 train=0.1937 val=0.4168 val_auc=0.967 elapsed=10s
+epoch  34 train=0.4359 val=1.0475 val_auc=0.781 elapsed=10s
 /home/sirena/miniconda3/envs/brian_ase_env/lib/python3.11/site-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
   warnings.warn(
-epoch  35 train=0.1944 val=0.4353 val_auc=0.971 elapsed=10s
+epoch  35 train=0.3913 val=1.0518 val_auc=0.810 elapsed=10s
 /home/sirena/miniconda3/envs/brian_ase_env/lib/python3.11/site-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
   warnings.warn(
-epoch  36 train=0.1892 val=0.3673 val_auc=0.975 elapsed=11s
+epoch  36 train=0.3578 val=0.9821 val_auc=0.806 elapsed=10s
 /home/sirena/miniconda3/envs/brian_ase_env/lib/python3.11/site-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
   warnings.warn(
-epoch  37 train=0.1855 val=0.3959 val_auc=0.968 elapsed=11s
+epoch  37 train=0.3510 val=1.2947 val_auc=0.815 elapsed=11s
 /home/sirena/miniconda3/envs/brian_ase_env/lib/python3.11/site-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
   warnings.warn(
-epoch  38 train=0.1888 val=0.4774 val_auc=0.979 elapsed=11s
+epoch  38 train=0.3312 val=1.8169 val_auc=0.813 elapsed=11s
 /home/sirena/miniconda3/envs/brian_ase_env/lib/python3.11/site-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
   warnings.warn(
-epoch  39 train=0.1902 val=0.3423 val_auc=0.970 elapsed=11s
+epoch  39 train=0.3537 val=1.4153 val_auc=0.805 elapsed=11s
 /home/sirena/miniconda3/envs/brian_ase_env/lib/python3.11/site-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
   warnings.warn(
-epoch  40 train=0.1755 val=0.4047 val_auc=0.964 elapsed=12s
+epoch  40 train=0.3110 val=1.0848 val_auc=0.800 elapsed=12s
 /home/sirena/miniconda3/envs/brian_ase_env/lib/python3.11/site-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
   warnings.warn(
-epoch  41 train=0.1702 val=0.4714 val_auc=0.971 elapsed=12s
-{"best_epoch": 16, "test": {"accuracy": 0.9175824175824175, "balanced_accuracy": 0.9136295894865194, "precision": 0.859375, "recall": 0.9016393442622951, "f1": 0.88, "roc_auc": 0.9664002167727951, "average_precision": 0.9467731235717831, "confusion": [[112, 9], [6, 55]], "threshold": 0.5, "loss": 0.31939282882344594}}
+epoch  41 train=0.3001 val=1.1622 val_auc=0.808 elapsed=12s
+/home/sirena/miniconda3/envs/brian_ase_env/lib/python3.11/site-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
+  warnings.warn(
+epoch  42 train=0.2917 val=1.3151 val_auc=0.795 elapsed=12s
+/home/sirena/miniconda3/envs/brian_ase_env/lib/python3.11/site-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
+  warnings.warn(
+epoch  43 train=0.2979 val=1.4192 val_auc=0.801 elapsed=12s
+/home/sirena/miniconda3/envs/brian_ase_env/lib/python3.11/site-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
+  warnings.warn(
+epoch  44 train=0.2890 val=1.5216 val_auc=0.811 elapsed=13s
+/home/sirena/miniconda3/envs/brian_ase_env/lib/python3.11/site-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
+  warnings.warn(
+epoch  45 train=0.2507 val=1.2870 val_auc=0.806 elapsed=13s
+/home/sirena/miniconda3/envs/brian_ase_env/lib/python3.11/site-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
+  warnings.warn(
+epoch  46 train=0.2489 val=1.3389 val_auc=0.804 elapsed=13s
+/home/sirena/miniconda3/envs/brian_ase_env/lib/python3.11/site-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
+  warnings.warn(
+epoch  47 train=0.2323 val=1.6245 val_auc=0.801 elapsed=14s
+/home/sirena/miniconda3/envs/brian_ase_env/lib/python3.11/site-packages/torch_geometric/utils/_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
+  warnings.warn(
+epoch  48 train=0.2147 val=1.5984 val_auc=0.804 elapsed=14s
+{"best_epoch": 23, "test": {"accuracy": 0.6868131868131868, "balanced_accuracy": 0.695366481506571, "precision": 0.5238095238095238, "recall": 0.7213114754098361, "f1": 0.6068965517241379, "roc_auc": 0.7913561847988078, "average_precision": 0.6771802284660451, "confusion": [[81, 40], [17, 44]], "threshold": 0.5, "loss": 0.7929814647842239}}

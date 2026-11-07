@@ -4,6 +4,7 @@ Configuration: /home/sirena/Brian/Github/GNNEA/configs/sirena.yml
 Environment: brian_ase_env; physical GPU: 0
 Dataset: 1205 labelled Heredity offspring; good fraction 0.3402
 Source results: /home/sirena/Brian/Github/GNNEA/data/uspex_results1; USPEX version 2126
+Unrelaxed offspring source: /home/sirena/Brian/Github/GNNEA/data/uspex_results1/gatheredPOSCARS_unrelaxed
 Parent cell size: 42 atoms; good = child energy <= mean(previous generation) + (-0.5244) * std(previous generation)
 Completed training runs: 32
 
@@ -21,39 +22,41 @@ Checkpoint selection and early stopping use validation loss only; test data neve
 MXtal normalization is fit/recalibrated on training data only.
 
 Test ROC-AUC (mean +/- sample SD where multiple seeds are configured):
-cgcnn  concat_pool  group     : 0.708 +/- 0.046 -> 0.859 +/- 0.010; delta +0.152; improves in 3/3 seeds; balanced accuracy 0.650 -> 0.780
-cgcnn  concat_pool  generation: 0.665 -> 0.833; delta +0.168; improves in 1/1 seeds; balanced accuracy 0.623 -> 0.734
-cgcnn  pool_concat  group     : 0.710 +/- 0.016 -> 0.967 +/- 0.003; delta +0.258; improves in 3/3 seeds; balanced accuracy 0.647 -> 0.910
-cgcnn  pool_concat  generation: 0.695 -> 0.956; delta +0.261; improves in 1/1 seeds; balanced accuracy 0.652 -> 0.871
-mxtal  concat_pool  group     : 0.721 +/- 0.016 -> 0.917 +/- 0.019; delta +0.196; improves in 3/3 seeds; balanced accuracy 0.662 -> 0.850
-mxtal  concat_pool  generation: 0.698 -> 0.878; delta +0.180; improves in 1/1 seeds; balanced accuracy 0.623 -> 0.765
-mxtal  pool_concat  group     : 0.699 +/- 0.033 -> 0.971 +/- 0.002; delta +0.273; improves in 3/3 seeds; balanced accuracy 0.643 -> 0.899
-mxtal  pool_concat  generation: 0.691 -> 0.963; delta +0.272; improves in 1/1 seeds; balanced accuracy 0.617 -> 0.896
+cgcnn  concat_pool  group     : 0.724 +/- 0.051 -> 0.769 +/- 0.016; delta +0.045; improves in 3/3 seeds; balanced accuracy 0.645 -> 0.702
+cgcnn  concat_pool  generation: 0.687 -> 0.757; delta +0.070; improves in 1/1 seeds; balanced accuracy 0.663 -> 0.675
+cgcnn  pool_concat  group     : 0.701 +/- 0.020 -> 0.769 +/- 0.024; delta +0.068; improves in 3/3 seeds; balanced accuracy 0.643 -> 0.689
+cgcnn  pool_concat  generation: 0.716 -> 0.786; delta +0.069; improves in 1/1 seeds; balanced accuracy 0.672 -> 0.695
+mxtal  concat_pool  group     : 0.717 +/- 0.010 -> 0.829 +/- 0.032; delta +0.112; improves in 3/3 seeds; balanced accuracy 0.662 -> 0.750
+mxtal  concat_pool  generation: 0.698 -> 0.788; delta +0.090; improves in 1/1 seeds; balanced accuracy 0.623 -> 0.724
+mxtal  pool_concat  group     : 0.698 +/- 0.023 -> 0.817 +/- 0.015; delta +0.120; improves in 3/3 seeds; balanced accuracy 0.652 -> 0.739
+mxtal  pool_concat  generation: 0.694 -> 0.766; delta +0.072; improves in 1/1 seeds; balanced accuracy 0.653 -> 0.675
 
 How predictions change (each matched seed):
-cgcnn concat_pool group seed=0: corrected 29, regressed 3 of 149; AUC delta +0.188, paired parent-group bootstrap 95% interval [+0.124, +0.266]
-cgcnn concat_pool group seed=1: corrected 34, regressed 10 of 182; AUC delta +0.089, paired parent-group bootstrap 95% interval [+0.043, +0.167]
-cgcnn concat_pool group seed=2: corrected 45, regressed 10 of 178; AUC delta +0.178, paired parent-group bootstrap 95% interval [+0.085, +0.263]
-cgcnn concat_pool generation seed=0: corrected 35, regressed 21 of 248; AUC delta +0.168, paired parent-group bootstrap 95% interval [+0.125, +0.215]
-cgcnn pool_concat group seed=0: corrected 42, regressed 11 of 149; AUC delta +0.257, paired parent-group bootstrap 95% interval [+0.159, +0.354]
-cgcnn pool_concat group seed=1: corrected 51, regressed 5 of 182; AUC delta +0.272, paired parent-group bootstrap 95% interval [+0.190, +0.362]
-cgcnn pool_concat group seed=2: corrected 61, regressed 11 of 178; AUC delta +0.244, paired parent-group bootstrap 95% interval [+0.162, +0.338]
-cgcnn pool_concat generation seed=0: corrected 63, regressed 19 of 248; AUC delta +0.261, paired parent-group bootstrap 95% interval [+0.194, +0.335]
-mxtal concat_pool group seed=0: corrected 26, regressed 3 of 149; AUC delta +0.187, paired parent-group bootstrap 95% interval [+0.131, +0.266]
-mxtal concat_pool group seed=1: corrected 35, regressed 6 of 182; AUC delta +0.186, paired parent-group bootstrap 95% interval [+0.090, +0.281]
-mxtal concat_pool group seed=2: corrected 60, regressed 12 of 178; AUC delta +0.216, paired parent-group bootstrap 95% interval [+0.132, +0.296]
-mxtal concat_pool generation seed=0: corrected 49, regressed 18 of 248; AUC delta +0.180, paired parent-group bootstrap 95% interval [+0.132, +0.242]
-mxtal pool_concat group seed=0: corrected 40, regressed 5 of 149; AUC delta +0.300, paired parent-group bootstrap 95% interval [+0.208, +0.396]
-mxtal pool_concat group seed=1: corrected 47, regressed 6 of 182; AUC delta +0.233, paired parent-group bootstrap 95% interval [+0.121, +0.359]
-mxtal pool_concat group seed=2: corrected 57, regressed 7 of 178; AUC delta +0.285, paired parent-group bootstrap 95% interval [+0.183, +0.379]
-mxtal pool_concat generation seed=0: corrected 75, regressed 12 of 248; AUC delta +0.272, paired parent-group bootstrap 95% interval [+0.208, +0.343]
+cgcnn concat_pool group seed=0: corrected 26, regressed 18 of 149; AUC delta +0.084, paired parent-group bootstrap 95% interval [+0.002, +0.164]
+cgcnn concat_pool group seed=1: corrected 34, regressed 22 of 182; AUC delta +0.002, paired parent-group bootstrap 95% interval [-0.079, +0.069]
+cgcnn concat_pool group seed=2: corrected 28, regressed 22 of 178; AUC delta +0.048, paired parent-group bootstrap 95% interval [-0.037, +0.136]
+cgcnn concat_pool generation seed=0: corrected 38, regressed 25 of 248; AUC delta +0.070, paired parent-group bootstrap 95% interval [-0.010, +0.143]
+cgcnn pool_concat group seed=0: corrected 16, regressed 23 of 149; AUC delta +0.061, paired parent-group bootstrap 95% interval [-0.010, +0.130]
+cgcnn pool_concat group seed=1: corrected 32, regressed 31 of 182; AUC delta +0.070, paired parent-group bootstrap 95% interval [-0.020, +0.163]
+cgcnn pool_concat group seed=2: corrected 50, regressed 22 of 178; AUC delta +0.071, paired parent-group bootstrap 95% interval [+0.009, +0.185]
+cgcnn pool_concat generation seed=0: corrected 49, regressed 30 of 248; AUC delta +0.069, paired parent-group bootstrap 95% interval [-0.001, +0.139]
+mxtal concat_pool group seed=0: corrected 23, regressed 13 of 149; AUC delta +0.101, paired parent-group bootstrap 95% interval [+0.024, +0.186]
+mxtal concat_pool group seed=1: corrected 34, regressed 15 of 182; AUC delta +0.138, paired parent-group bootstrap 95% interval [+0.052, +0.223]
+mxtal concat_pool group seed=2: corrected 42, regressed 19 of 178; AUC delta +0.097, paired parent-group bootstrap 95% interval [+0.014, +0.185]
+mxtal concat_pool generation seed=0: corrected 51, regressed 19 of 248; AUC delta +0.090, paired parent-group bootstrap 95% interval [+0.031, +0.154]
+mxtal pool_concat group seed=0: corrected 29, regressed 11 of 149; AUC delta +0.132, paired parent-group bootstrap 95% interval [+0.063, +0.209]
+mxtal pool_concat group seed=1: corrected 38, regressed 23 of 182; AUC delta +0.089, paired parent-group bootstrap 95% interval [+0.001, +0.196]
+mxtal pool_concat group seed=2: corrected 44, regressed 22 of 178; AUC delta +0.138, paired parent-group bootstrap 95% interval [+0.068, +0.241]
+mxtal pool_concat generation seed=0: corrected 43, regressed 33 of 248; AUC delta +0.072, paired parent-group bootstrap 95% interval [+0.010, +0.142]
 
 Interpretation and limits:
-The child structures come from gatheredPOSCARS and have already been relaxed. This is a post-relaxation classification study.
-An observed gain does not establish screening performance before relaxation; that requires unrelaxed offspring structures.
+Child geometry comes exclusively from the configured unrelaxed POSCAR collection. No relaxed child geometry is used as an offspring input.
+Parent geometry and target energies are relaxed. This tests whether unrelaxed candidate geometry predicts the later relaxation outcome.
+Graph caches distinguish unrelaxed child inputs from relaxed parents even when they share a USPEX ID.
 The group split groups unordered parent energies rounded to 3 decimals, following the previous report; it is not a fully structure-disjoint split.
 The generation split holds out later generations but can revisit the same packings. Neither split proves transfer to a new USPEX run or molecule.
-structure_id_reuse.csv separates children whose IDs occur among augmented training inputs. Different IDs can still represent copied packings.
+structure_id_reuse.csv separates child IDs seen/unseen as relaxed training parents. A shared ID here does not imply the same geometry state.
+prediction_changes.csv separately checks whether an unrelaxed test child ID occurs among unrelaxed training children. Different IDs can still represent copied packings.
 Bootstrap intervals resample parent-pair groups within each fixed test set; they do not measure uncertainty across USPEX searches.
 The conflicting-parent-group subsets in paired_deltas.csv are descriptive: groups producing both labels in this dataset.
 concat_pool keeps the same parameter count with the child; pool_concat has a wider head. Changes in parameter counts are recorded in runs.csv.

@@ -59,7 +59,9 @@ dataset:
   natoms: 42
   z: -0.5244
   operators: [Heredity]
-  offspring_geometry: relaxed  # gatheredPOSCARS contains relaxed structures only
+  parent_structures: gatheredPOSCARS
+  offspring_structures: gatheredPOSCARS_unrelaxed
+  offspring_geometry: unrelaxed
 
 split:
   val: 0.15

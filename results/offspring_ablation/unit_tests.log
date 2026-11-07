@@ -1,6 +1,15 @@
 /home/sirena/miniconda3/envs/brian_ase_env/lib/python3.11/site-packages/torch/jit/_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
   warnings.warn(
+test_cgcnn_concat_pool (test_offspring_input.OffspringInputTests.test_cgcnn_concat_pool) ... ok
+test_cgcnn_pool_concat (test_offspring_input.OffspringInputTests.test_cgcnn_pool_concat) ... ok
+test_configuration_paths_and_project (test_offspring_input.OffspringInputTests.test_configuration_paths_and_project) ... ok
+test_database_round_trip_and_legacy_read (test_offspring_input.OffspringInputTests.test_database_round_trip_and_legacy_read) ... ok
+test_mxtal_concat_pool (test_offspring_input.OffspringInputTests.test_mxtal_concat_pool) ... ok
+test_mxtal_pool_concat (test_offspring_input.OffspringInputTests.test_mxtal_pool_concat) ... ok
+test_same_id_has_separate_unrelaxed_child_and_relaxed_parent_clusters (test_offspring_input.OffspringInputTests.test_same_id_has_separate_unrelaxed_child_and_relaxed_parent_clusters) ... ok
+test_same_id_has_separate_unrelaxed_child_and_relaxed_parent_graphs (test_offspring_input.OffspringInputTests.test_same_id_has_separate_unrelaxed_child_and_relaxed_parent_graphs) ... ok
+
 ----------------------------------------------------------------------
-Ran 6 tests in 0.279s
+Ran 8 tests in 0.309s
 
 OK
