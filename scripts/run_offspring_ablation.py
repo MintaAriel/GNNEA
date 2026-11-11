@@ -6,6 +6,8 @@ import json
 from pathlib import Path
 import sys
 
+import yaml
+
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from src.config import config_from_cli, configure_runtime, project_path
 
@@ -64,7 +66,11 @@ def main():
         metric_path = run_out / 'metrics.json'
         if metric_path.exists():
             previous = json.loads(metric_path.read_text())
-            if previous.get('fingerprint') != fingerprint(cfg, encoder):
+            check = deepcopy(cfg)                             # the physical GPU may differ between shards
+            resolved = run_out / 'resolved_config.yml'
+            if resolved.exists():
+                check['runtime']['gpu'] = yaml.safe_load(resolved.read_text())['runtime']['gpu']
+            if previous.get('fingerprint') != fingerprint(check, encoder):
                 raise RuntimeError(f'{name}: existing results have different data/config/code; select a new output_dir.')
             if grid['resume'] or args.analyze_only:
                 print(f'[{index}/{len(jobs)}] verified {name}', flush=True)
