@@ -121,8 +121,9 @@ mxtal:
 experiments:
   # report 4: MXtal parents as asymmetric units (mxtal.inside: asym), reports 2 + 3 combined.
   # Report 3 used ./results/offspring_ablation (whole-cell parents, group + generation, no energies).
+  # CGCNN does not depend on the inside unit: its reference results are reports 1 (parents) and 3 (+child).
   output_dir: ./results/offspring_ablation_asym
-  encoders: [cgcnn, mxtal]
+  encoders: [mxtal]
   fusions: [concat_pool, pool_concat]
   splits:
     random: [0, 1, 2]

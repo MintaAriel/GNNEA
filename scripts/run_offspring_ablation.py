@@ -57,7 +57,8 @@ def main():
                             jobs.append((name, encoder, cfg))
     shard = tuple(map(int, args.shard.split('/'))) if args.shard else None
     for index, (name, encoder, cfg) in enumerate(jobs, 1):
-        if shard and (index - 1) % shard[1] != shard[0]:
+        # diagonal assignment: consecutive blocks are rotated, so every shard gets every energy/child variant
+        if shard and ((index - 1) + (index - 1) // shard[1]) % shard[1] != shard[0]:
             continue
         run_out = out / 'runs' / name
         metric_path = run_out / 'metrics.json'
