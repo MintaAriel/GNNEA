@@ -7,10 +7,14 @@ What is ported (MXtalTools source -> here)
 ------------------------------------------
 crystal_building.utils.ucell2cluster / MolCrystalBuilding.build_cluster
         -> molecules_from_atoms + build_cluster
-           Our USPEX cells are P1 cells holding whole molecules (theophylline: 42 atoms = 2 x C7H8N4O2),
-           so the "asymmetric unit" is the whole unit cell (Z' = number of molecules, sg 1). Molecules are
+           Our USPEX cells hold whole molecules (theophylline: 42 atoms = 2 x C7H8N4O2) but carry no
+           symmetry operators. inside='asym' (MXtalTools): the space group is found with spglib and only
+           the Z' molecules of the asymmetric unit are "inside" (aux_ind 0); their symmetry mates in the cell
+           are image atoms that copy the features of the asymmetric-unit atom they are a symmetry copy of
+           (image_src), like MXtalTools' symmetry-generated molecules. inside='cell': the whole unit cell is
+           inside (the crystal is treated as P1; used for the first MXtal report). Molecules are
            found from covalent radii under PBC (crystal_steps.find_molecules(bonds='distance')) and made
-           whole; the cluster is the reference cell (aux_ind 0, "inside") plus its periodic images.
+           whole; the cluster is the inside unit plus its symmetry / periodic images.
            Image atoms within `cutoff` of an inside atom are kept (aux_ind 1); the rest (aux_ind 2 in
            MXtalTools, they are in no edge) are dropped here.
 models.functions.radial_graph.build_radial_graph
@@ -45,6 +49,7 @@ from math import pi as PI
 from typing import Optional
 
 import numpy as np
+import spglib
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -159,39 +164,89 @@ def radial_edges(pos, mol_ind, n_inside, cutoff, max_num_neighbors=100):
             torch.stack([src[~intra], tgt[~intra]]).long())
 
 
-def build_cluster(atoms, cutoff=6.0, max_num_neighbors=100, bond_scale=(1.15, 1.35)):
-    """ucell2cluster + build_radial_graph for one ase.Atoms crystal (P1 cell holding whole molecules).
+def asymmetric_unit(pos, z, mol, cell, symprec=0.01, tol=0.3):
+    """Asymmetric unit of a cell of whole molecules (spglib at `symprec`, USPEX's tolerance).
+
+    Returns (asym_mols, src): the molecules forming the asymmetric unit (lowest index of each orbit) and
+    src [n] = index of the asymmetric-unit atom every cell atom is a symmetry copy of (itself if in it).
+    A molecule that cannot be matched atom by atom (within `tol` A) to an image of an asymmetric
+    molecule is kept in the asymmetric unit.
+    """
+    inv = np.linalg.inv(cell)
+    frac = pos @ inv
+    ds = spglib.get_symmetry_dataset((cell, frac, z), symprec=symprec)
+    ops = [] if ds is None else list(zip(ds.rotations, ds.translations))
+    src = np.full(len(z), -1)
+    asym = []
+    for m in np.unique(mol):
+        sel = np.nonzero(mol == m)[0]
+        if (src[sel] >= 0).all():
+            continue
+        asym.append(int(m))
+        src[sel] = sel
+        for R, t in ops:                                     # symmetry images of molecule m
+            img = frac[sel] @ R.T + t
+            for m2 in np.unique(mol[src < 0]):
+                sel2 = np.nonzero(mol == m2)[0]
+                if len(sel2) != len(sel):
+                    continue
+                dd = img[:, None] - frac[sel2][None]
+                dd = (dd - np.round(dd)) @ cell
+                d = np.linalg.norm(dd, axis=-1)
+                d[z[sel][:, None] != z[sel2][None]] = np.inf
+                match = d.argmin(1)
+                if (d.min(1) < tol).all() and len(set(match)) == len(sel):
+                    src[sel2[match]] = sel
+    return asym, src
+
+
+def build_cluster(atoms, cutoff=6.0, max_num_neighbors=100, bond_scale=(1.15, 1.35), inside='cell', symprec=0.01):
+    """ucell2cluster + build_radial_graph for one ase.Atoms crystal (cell holding whole molecules).
+
+    inside='cell': the whole unit cell is the inside unit (P1). inside='asym': only the asymmetric unit
+    (spglib at `symprec`) is inside; the symmetry mates in the cell become image atoms (MXtalTools).
 
     Returns a dict of tensors (one graph):
-        z [N], pos [N, 3]         inside atoms first (the unit cell, molecules whole), then image atoms
+        z [N], pos [N, 3]         inside atoms first (molecules whole), then image atoms
         mol_ind [N]               molecule index in the cluster (images of molecule m get new indices)
         aux_ind [N]               0 inside, 1 image atom within `cutoff` of an inside atom
         image_src [N]             index of the inside atom each node is a copy of (itself for inside nodes)
         edge_index, edge_index_inter   see radial_edges
-        n_mol, n_inside           ints (n_mol = Z' in MXtalTools terms, the cell is taken as P1)
+        n_mol, n_inside, z_prime  ints (molecules in the cell, inside atoms, molecules inside)
     """
     pos0, z0, mol0 = molecules_from_atoms(atoms, bond_scale=bond_scale)
     cell = atoms.cell.array
-    n_in, n_mol = len(z0), int(mol0.max()) + 1
+    n_mol = int(mol0.max()) + 1
+    if inside == 'asym':
+        asym, src0 = asymmetric_unit(pos0, z0, mol0, cell, symprec=symprec)
+        order = np.argsort(~np.isin(mol0, asym), kind='stable')     # asymmetric unit first
+        rank = np.empty_like(order); rank[order] = np.arange(len(order))
+        pos0, z0, mol0, src0 = pos0[order], z0[order], mol0[order], rank[src0[order]]
+        n_in = int(np.isin(mol0, asym).sum())
+    elif inside == 'cell':
+        src0, n_in = np.arange(len(z0)), len(z0)
+    else:
+        raise ValueError(inside)
     reach = cutoff + 2 * np.max([np.linalg.norm(pos0[mol0 == m] - pos0[mol0 == m].mean(0), axis=1).max()
                                  for m in range(n_mol)]) + 1.0
     T = _translations(cell, reach) @ cell                    # [n_cells, 3], zero translation first
     img = pos0[None] + T[:, None]                            # [n_cells, n_in, 3]
-    dmin = torch.cdist(torch.as_tensor(img.reshape(-1, 3)), torch.as_tensor(pos0)).min(1).values.numpy()
-    dmin = dmin.reshape(len(T), n_in)
+    dmin = torch.cdist(torch.as_tensor(img.reshape(-1, 3)), torch.as_tensor(pos0[:n_in])).min(1).values.numpy()
+    dmin = dmin.reshape(len(T), len(z0))
     keep = dmin <= cutoff
-    keep[0] = True                                           # the reference cell itself
+    keep[0, :n_in] = True                                    # the inside unit itself
 
-    cell_ind, atom_ind = np.nonzero(keep)                    # row-major: cell 0 (inside) first
+    cell_ind, atom_ind = np.nonzero(keep)                    # row-major: cell 0, inside atoms first
     pos = img[cell_ind, atom_ind]
     z = z0[atom_ind]
     mol_ind = mol0[atom_ind] + n_mol * cell_ind
-    aux_ind = (cell_ind > 0).astype(int)
+    aux_ind = ((cell_ind > 0) | (atom_ind >= n_in)).astype(int)
     edge_index, edge_index_inter = radial_edges(pos, mol_ind, n_in, cutoff, max_num_neighbors)
     return dict(z=torch.as_tensor(z, dtype=torch.long), pos=torch.as_tensor(pos, dtype=torch.float32),
                 mol_ind=torch.as_tensor(mol_ind, dtype=torch.long), aux_ind=torch.as_tensor(aux_ind, dtype=torch.long),
-                image_src=torch.as_tensor(atom_ind, dtype=torch.long),
-                edge_index=edge_index, edge_index_inter=edge_index_inter, n_mol=n_mol, n_inside=n_in)
+                image_src=torch.as_tensor(src0[atom_ind], dtype=torch.long),
+                edge_index=edge_index, edge_index_inter=edge_index_inter, n_mol=n_mol, n_inside=n_in,
+                z_prime=len(np.unique(mol0[:n_in])))
 
 
 class PairClusterData(Data):
@@ -216,7 +271,7 @@ _CLUSTER_KEYS = ('z', 'pos', 'aux_ind', 'image_src', 'edge_index', 'edge_index_i
 
 
 def make_pair_cluster_dataset(df, cutoff=6.0, max_num_neighbors=100, global_cols=(), cache=None, verbose=True,
-                              offspring_structure=False):
+                              offspring_structure=False, inside='cell'):
     """One PairClusterData per row of a labelled offspring df (needs p1, p2, p1_id, p2_id, label, offspring_id).
     Clusters are cached by (geometry state, uspex_id); pass `cache` (key -> build_cluster
     output) to reuse clusters built earlier. Returns (data, cache)."""
@@ -224,7 +279,7 @@ def make_pair_cluster_dataset(df, cutoff=6.0, max_num_neighbors=100, global_cols
 
     def cluster(uid, atoms):
         if uid not in cache:
-            cache[uid] = build_cluster(atoms, cutoff=cutoff, max_num_neighbors=max_num_neighbors)
+            cache[uid] = build_cluster(atoms, cutoff=cutoff, max_num_neighbors=max_num_neighbors, inside=inside)
             if verbose and len(cache) % 200 == 0:
                 print(f'  built {len(cache)} clusters', flush=True)
         return cache[uid]

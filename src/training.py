@@ -127,11 +127,13 @@ def prepare_data(config, encoder):
                                  offspring_structure=child)
         cache = None
     else:
-        cache_path = cache_dir / f"mxtal_c{model_cfg['cutoff']:g}_n{model_cfg['max_neighbors']}.pt"
+        inside = model_cfg.get('inside', 'cell')
+        suffix = '' if inside == 'cell' else f'_{inside}'          # keep the existing whole-cell caches valid
+        cache_path = cache_dir / f"mxtal_c{model_cfg['cutoff']:g}_n{model_cfg['max_neighbors']}{suffix}.pt"
         cache = torch.load(cache_path, weights_only=False) if cache_path.exists() else {}
         n_before = len(cache)
         data, cache = make_pair_cluster_dataset(lab, model_cfg['cutoff'], model_cfg['max_neighbors'],
-                                               gcols, cache=cache, offspring_structure=child)
+                                               gcols, cache=cache, offspring_structure=child, inside=inside)
         if len(cache) != n_before:
             torch.save(cache, cache_path)
     _DATASETS[key] = lab, data, cache

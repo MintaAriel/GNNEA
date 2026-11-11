@@ -98,6 +98,7 @@ cgcnn:
 mxtal:
   cutoff: 6.0
   max_neighbors: 100
+  inside: asym  # asymmetric unit inside (MXtalTools); "cell" = whole cell as P1 (first MXtal report)
   node_dim: 64
   message_dim: 32
   embedding_dim: 64
@@ -118,12 +119,16 @@ mxtal:
   fc_norm: layer
 
 experiments:
-  output_dir: ./results/offspring_ablation
+  # report 4: MXtal parents as asymmetric units (mxtal.inside: asym), reports 2 + 3 combined.
+  # Report 3 used ./results/offspring_ablation (whole-cell parents, group + generation, no energies).
+  output_dir: ./results/offspring_ablation_asym
   encoders: [cgcnn, mxtal]
   fusions: [concat_pool, pool_concat]
   splits:
+    random: [0, 1, 2]
     group: [0, 1, 2]
     generation: [0]
+  energy_features: [false, true]
   offspring_structure: [false, true]
   resume: true
 
@@ -131,5 +136,5 @@ analysis:
   bootstrap_samples: 2000
   seed: 1729
   confidence: 0.95
-  report_path: ./report/offspring_ablation.txt
+  report_path: ./report/offspring_ablation_asym.txt
 

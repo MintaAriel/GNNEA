@@ -35,9 +35,10 @@ def analyze(config, run_paths):
     for path in run_paths:
         result = json.loads((path / 'metrics.json').read_text())
         c = result['config']
-        key = (result['encoder'], c['fusion'], c['split'], c['seed'])
+        key = (result['encoder'], c['fusion'], c['split'], c['seed'], bool(c.get('energy_features', False)))
         by_key.setdefault(key, {})[c['offspring_structure']] = (path, result)
-        records.append(dict(encoder=key[0], fusion=key[1], split=key[2], seed=key[3],
+        records.append(dict(encoder=key[0], fusion=key[1], split=key[2], seed=key[3], energy_features=key[4],
+                            inside=result['config'].get('inside', 'cell') if key[0] == 'mxtal' else None,
                             offspring_structure=c['offspring_structure'], best_epoch=result['best_epoch'],
                             offspring_geometry=result['provenance']['offspring_geometry'],
                             epochs_completed=result['epochs_completed'], n_params=result['n_params'],
@@ -69,7 +70,7 @@ def analyze(config, run_paths):
         pred['child_relaxed_id_seen_as_training_parent'] = pred.offspring_id.isin(training_parent_ids)
         lo, hi = paired_bootstrap(pred.y_parents.to_numpy(), pred.p_good_parents.to_numpy(),
             pred.p_good_offspring.to_numpy(), groups, a['bootstrap_samples'], a['seed'], a['confidence'])
-        row = dict(encoder=key[0], fusion=key[1], split=key[2], seed=key[3], n_test=len(pred),
+        row = dict(encoder=key[0], fusion=key[1], split=key[2], seed=key[3], energy_features=key[4], n_test=len(pred),
                    offspring_geometry=ds['offspring_geometry'],
                    auc_delta_ci_low=lo, auc_delta_ci_high=hi)
         for metric in METRICS:
@@ -86,7 +87,8 @@ def analyze(config, run_paths):
         row['regressed'] = int((pred.change == 'regressed').sum())
         for seen, name in ((False, 'child_id_unseen_as_relaxed_parent'), (True, 'child_id_seen_as_relaxed_parent')):
             subset = pred[pred.child_relaxed_id_seen_as_training_parent == seen]
-            reuse = dict(encoder=key[0], fusion=key[1], split=key[2], seed=key[3], subset=name, n=len(subset),
+            reuse = dict(encoder=key[0], fusion=key[1], split=key[2], seed=key[3], energy_features=key[4],
+                         subset=name, n=len(subset),
                          offspring_geometry=ds['offspring_geometry'])
             for prefix in ('parents', 'offspring'):
                 reuse[f'{prefix}_auc'] = (roc_auc_score(subset.y_parents, subset[f'p_good_{prefix}'])
@@ -99,7 +101,7 @@ def analyze(config, run_paths):
             row[f'{name}_accuracy_delta'] = (float(subset.offspring_correct.mean() - subset.parents_correct.mean())
                                              if len(subset) else None)
         pairs.append(row)
-        pred['encoder'], pred['fusion'], pred['split'], pred['seed'] = key
+        pred['encoder'], pred['fusion'], pred['split'], pred['seed'], pred['energy_features'] = key
         pred['offspring_geometry'] = ds['offspring_geometry']
         changes.append(pred)
     paired = pd.DataFrame(pairs)
@@ -107,8 +109,8 @@ def analyze(config, run_paths):
     pd.concat(changes, ignore_index=True).to_csv(out / 'prediction_changes.csv', index=False)
     pd.DataFrame(reuse_rows).to_csv(out / 'structure_id_reuse.csv', index=False)
     summary_rows = []
-    for key, subset in paired.groupby(['encoder', 'fusion', 'split'], sort=False):
-        row = dict(encoder=key[0], fusion=key[1], split=key[2], n_seeds=len(subset),
+    for key, subset in paired.groupby(['encoder', 'fusion', 'split', 'energy_features'], sort=False):
+        row = dict(encoder=key[0], fusion=key[1], split=key[2], energy_features=key[3], n_seeds=len(subset),
                    offspring_geometry=ds['offspring_geometry'],
                    positive_auc_seeds=int((subset.delta_roc_auc > 0).sum()))
         for metric in METRICS:
@@ -136,9 +138,11 @@ def plot_results(config, paired, summary, by_key):
             errors = subset[f'{prefix}_roc_auc_std'].fillna(0)
             ax.bar(x + offset, means, width=0.34, yerr=errors, capsize=3, label=label, color=color)
             for i, row in subset.iterrows():
-                values = paired[(paired.encoder == row.encoder) & (paired.fusion == row.fusion) & (paired.split == split)]
+                values = paired[(paired.encoder == row.encoder) & (paired.fusion == row.fusion) & (paired.split == split)
+                                & (paired.energy_features == row.energy_features)]
                 ax.scatter(np.full(len(values), i + offset), values[f'{prefix}_roc_auc'], color='black', s=14, zorder=3)
-        ax.set_xticks(x, [f"{r.encoder.upper()}\n{r.fusion.replace('_', '-') }" for r in subset.itertuples()])
+        ax.set_xticks(x, [f"{r.encoder.upper()}\n{r.fusion.replace('_', '-')}{chr(10) + '+E' if r.energy_features else ''}"
+                          for r in subset.itertuples()], fontsize=8)
         ax.set_ylim(0.45, 1.0)
         ax.axhline(0.5, color='grey', linestyle=':', linewidth=1)
         ax.set_ylabel('Test ROC-AUC')
@@ -156,7 +160,8 @@ def plot_results(config, paired, summary, by_key):
         for col, encoder in enumerate(encoders):
             ax = axes[row, col]
             for key, variants in by_key.items():
-                if key[0] != encoder or key[2] != split or key[3] != config['experiments']['splits'][split][0]:
+                if (key[0] != encoder or key[2] != split or key[3] != config['experiments']['splits'][split][0]
+                        or key[4]):
                     continue
                 for child, (path, _) in variants.items():
                     pred = pd.read_csv(path / 'test_predictions.csv')
@@ -198,13 +203,13 @@ def write_report(config, summary, paired, lab, records):
     for row in summary.itertuples():
         base_sd = f' +/- {row.parents_roc_auc_std:.3f}' if row.n_seeds > 1 else ''
         child_sd = f' +/- {row.offspring_roc_auc_std:.3f}' if row.n_seeds > 1 else ''
-        lines.append(f'{row.encoder:6s} {row.fusion:12s} {row.split:10s}: '
+        lines.append(f"{row.encoder:6s} {row.fusion:12s} {row.split:10s} {'+E' if row.energy_features else '  '}: "
                      f'{row.parents_roc_auc_mean:.3f}{base_sd} -> {row.offspring_roc_auc_mean:.3f}{child_sd}; '
                      f'delta {row.delta_roc_auc_mean:+.3f}; improves in {row.positive_auc_seeds}/{row.n_seeds} seeds; '
                      f'balanced accuracy {row.parents_balanced_accuracy_mean:.3f} -> {row.offspring_balanced_accuracy_mean:.3f}')
     lines += ['', 'How predictions change (each matched seed):']
     for row in paired.itertuples():
-        lines.append(f'{row.encoder} {row.fusion} {row.split} seed={row.seed}: '
+        lines.append(f"{row.encoder} {row.fusion} {row.split} seed={row.seed}{' +E' if row.energy_features else ''}: "
                      f'corrected {row.corrected}, regressed {row.regressed} of {row.n_test}; '
                      f'AUC delta {row.delta_roc_auc:+.3f}, paired parent-group bootstrap '
                      f"{config['analysis']['confidence']:.0%} interval [{row.auc_delta_ci_low:+.3f}, {row.auc_delta_ci_high:+.3f}]")
